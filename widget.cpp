@@ -20,11 +20,18 @@ Widget::Widget(QWidget *parent)
     label->setAlignment(Qt::AlignCenter);
     label->setText("Проводим запрос погоды\n по аэропортам.");
 
+    bt_UUWW= new QPushButton(tr("Запрос Внуково"),this);
+    bt_UUDD= new QPushButton(tr("Запрос Домодедово"),this);
+    bt_UUEE= new QPushButton(tr("Запрос Шереметьево"),this);
+
     vbox= new QVBoxLayout();
     vbox->addWidget(label);
+    vbox->addWidget(bt_UUWW);
+    vbox->addWidget(bt_UUDD);
+    vbox->addWidget(bt_UUEE);
+
     this->setLayout(vbox);
 
-    weather= new lb_weather();//
     timer_show_weather =new QTimer(this);
     timer_show_weather->setInterval(6000);// интервал 6 сек
     connect(timer_show_weather,&QTimer::timeout,this,&Widget::Show_weather);
@@ -38,16 +45,8 @@ Widget::~Widget()
 }
 
 void Widget::Show_weather()
-{   weather->show();
-    //   qDebug()<<"Show weather"<<QTime::currentTime().toString();
-    timer_close_weather =new QTimer(this);
-    timer_close_weather->setInterval(2000);// интервал 2 сек
-    timer_close_weather->setSingleShot(true);
 
-    connect(timer_close_weather,&QTimer::timeout,[=]{
-        weather->close();
-        //     qDebug()<<"Close weather"<<QTime::currentTime().toString();
-    });
-    timer_close_weather->start();
+{   weather= new lb_weather();// класс запроса погоды
+    weather->show();
 
 }

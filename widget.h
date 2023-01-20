@@ -9,6 +9,7 @@
 #include <QTimer>
 #include <QTime>
 #include <QDebug>
+#include <QPushButton>
 
 #include "lb_weather.h"
 
@@ -26,10 +27,13 @@ private:
     QFont *ft=nullptr;
     QPalette *pa=nullptr;
     QIcon *icon=nullptr;
+    QPushButton *bt_UUWW= nullptr;
+    QPushButton *bt_UUDD= nullptr;
+    QPushButton *bt_UUEE= nullptr;
 
     lb_weather *weather=nullptr;
     QTimer* timer_show_weather =nullptr;
-    QTimer* timer_close_weather =nullptr;
+
 
     void Show_weather();
 };
