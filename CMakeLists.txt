@@ -15,16 +15,17 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS  Core Widgets Gui Network REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets Gui Network REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS  Core Widgets Xml Network Core5Compat Gui REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets Xml Network Core5Compat Gui REQUIRED)
 
 set(PROJECT_SOURCES
     main.cpp
     widget.h widget.cpp
     lb_weather.h lb_weather.cpp
     downloader.h downloader.cpp
+    xmlparser.h xmlparser.cpp
     resource.qrc
-
+    .clang-format
    )
 
 add_executable(${PROJECT_NAME} WIN32
@@ -35,9 +36,11 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Widgets
-    Qt${QT_VERSION_MAJOR}::Gui
+    Qt${QT_VERSION_MAJOR}::Xml
     Qt${QT_VERSION_MAJOR}::Network
-    )
+    Qt${QT_VERSION_MAJOR}::Core5Compat
+    Qt${QT_VERSION_MAJOR}::Gui
+ )
 
 #SET (MY_RELEASE_DIR ${CMAKE_BINARY_DIR}_Deploy_${PROJECT_NAME})
 ##SET (MY_RELEASE_DIR ${CMAKE_CURRENT_LIST_DIR}_MyReleaseDir_EXE)

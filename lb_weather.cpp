@@ -25,5 +25,6 @@ lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
         this->close ();
         qDebug () << "Close weather" << QTime::currentTime ().toString ();
     });
+
     timer_close_weather->start ();
 }

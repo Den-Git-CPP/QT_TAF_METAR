@@ -8,11 +8,12 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     icon = new QIcon (":/resource/avia.png");
     this->setWindowIcon (*icon); // Значок для окна
-
+ 
     label = new QLabel ();
     ft = new QFont ("Arial", 12, QFont::Bold); // Устанавливаем размер шрифта
     pa = new QPalette ();
-    pa->setColor (QPalette::WindowText, Qt::darkBlue); // Устанавливаем цвет шрифта
+    pa->setColor (QPalette::WindowText,
+      Qt::darkBlue); // Устанавливаем цвет шрифта
 
     label->setFont (*ft);
     label->setPalette (*pa);
@@ -20,6 +21,8 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     label->setText ("Проводим запрос погоды\n по аэропортам.");
 
     downloader = new Downloader (this); // Инициализируем Downloader
+    xmlparser = new XMLParser (this);
+
     bt_UUWW = new QPushButton (tr ("Запрос Внуково"), this);
 
     connect (bt_UUWW, &QPushButton::clicked, downloader, [=] () {
@@ -32,11 +35,14 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
         downloader->set_name_airport ("UUDD");
         downloader->getData ();
     });
+
     bt_UUEE = new QPushButton (tr ("Запрос Шереметьево"), this);
     connect (bt_UUEE, &QPushButton::clicked, downloader, [=] () {
         downloader->set_name_airport ("UUEE");
         downloader->getData ();
     });
+
+    connect (downloader, &Downloader::onReady, xmlparser, &XMLParser::Read);
 
     vbox = new QVBoxLayout ();
     vbox->addWidget (label);
@@ -54,12 +60,14 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
 Widget::~Widget ()
 {
-    //  delete weather;
+    delete weather;
 }
 
 void Widget::Show_weather ()
 
 {
+    emit this->bt_UUWW->clicked ();
+
     weather = new lb_weather (); // класс запроса погоды
     weather->show ();
 }

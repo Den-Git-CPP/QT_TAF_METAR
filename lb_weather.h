@@ -7,13 +7,12 @@
 #include <QWidget>
 
 class lb_weather : public QWidget {
-    Q_OBJECT
-  public:
-    explicit lb_weather (QWidget* parent = nullptr);
-
-  signals:
-  private:
-    QIcon* icon                 = nullptr;
-    QTimer* timer_close_weather = nullptr;
-    QString name_airport{ "" };
+  Q_OBJECT
+ public:
+  explicit lb_weather(QWidget* parent = nullptr);
+  QString name_airport{""};
+ signals:
+ private:
+  QIcon* icon = nullptr;
+  QTimer* timer_close_weather = nullptr;
 };
