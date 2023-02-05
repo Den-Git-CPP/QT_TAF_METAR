@@ -12,7 +12,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 COMPONENTS  Core Widgets Xml Network Core5Compat Gui REQUIRED)
@@ -24,6 +24,11 @@ set(PROJECT_SOURCES
     lb_weather.h lb_weather.cpp
     downloader.h downloader.cpp
     xmlparser.h xmlparser.cpp
+
+    maintaf.h maintaf.cpp
+    forecast_title.h forecast_title.cpp
+    forecast_taf.h forecast_taf.cpp
+    forecast.h forecast.cpp
     resource.qrc
     .clang-format
    )

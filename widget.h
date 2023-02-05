@@ -14,6 +14,8 @@
 #include "downloader.h"
 #include "lb_weather.h"
 #include "xmlparser.h"
+#include "maintaf.h"
+
 
 class Widget : public QWidget {
   Q_OBJECT
@@ -37,5 +39,7 @@ class Widget : public QWidget {
   QTimer *timer_show_weather = nullptr;
   Downloader *downloader = nullptr;
   XMLParser *xmlparser = nullptr;
+  MainTAF *main_TAF= nullptr;
+
   void Show_weather();
 };
