@@ -5,46 +5,56 @@ XMLParser::XMLParser (QObject* parent) : QObject (parent) {}
 
 void XMLParser::Read (MainTAF* main_TAF)
 {
-    QFile file ("G:/ProjectQT/TitleParser/file.xml");
-    if (!file.open (QFile::ReadOnly | QFile::Text)) {
-        qDebug () << "*Cannot read file*" << file.errorString ();
-        exit (0);
+    QFile file(":/file.xml");
+  if (!file.open(QFile::ReadOnly | QFile::Text)) {
+    //        QMessageBox::critical(this,"Load XML File Problem",
+    //        "Couldn't open xmlfile.xml to load settings for download",
+    //        QMessageBox::Ok);
+    //        return;
+    qDebug() << "Cannot read file" << file.errorString();
+    exit(0);
+  }
+  xmlReader.setDevice(&file);
+  xmlReader.readNext();
+  while (!xmlReader.atEnd() && !xmlReader.hasError()) {
+    QXmlStreamReader::TokenType token = xmlReader.readNext();
+    if (token == QXmlStreamReader::StartDocument) {
+      continue;
     }
-    reader.setDevice (&file);
-    if (reader.readNextStartElement ()) {
-        if (reader.name () == QString ("response")) {
-            read_response (main_TAF);
-        }
+    if (token == QXmlStreamReader::StartElement) {
+      if (xmlReader.name().toString() == "response") {
+        continue;
+      } else if (xmlReader.name().toString() == "request_index") {
+        qDebug() << xmlReader.readElementText();
+
+      } else if (xmlReader.name().toString() == "data_source") {
+        qDebug() << xmlReader.attributes().value("name").toString();
+      } else if (xmlReader.name().toString() == "request") {
+        qDebug() << xmlReader.attributes().value("type").toString();
+      } else if (xmlReader.name().toString() == "errors") {
+        read_errors();
+      } else if (xmlReader.name().toString() == "warnings") {
+        read_my_warninngs();
+      } else if (xmlReader.name().toString() == "time_taken_ms") {
+        qDebug() << xmlReader.readElementText();
+      } else if (xmlReader.name().toString() == "data") {
+        qDebug() << xmlReader.attributes().value("num_results").toString();
+      } else if (xmlReader.name().toString() == "TAF") {
+        read_TAF();
+      }
     }
+  } // while end file
+  if (xmlReader.hasError()) {
+    qDebug() << xmlReader.errorString();
+    return;
+  }
+
+  qDebug() << "READ_END";
 }
 void XMLParser::read_response (MainTAF* main_TAF)
 {
-    while (reader.readNextStartElement ()) {
-        if (reader.name () == QString ("request_index")) {
-            read_request_index (main_TAF);
-        }
-        else if (reader.name () == QString ("data_source")) {
-            read_data_sourse (main_TAF);
-        }
-        else if (reader.name () == QString ("request")) {
-            read_data_request_type (main_TAF);
-        }
-        else if (reader.name () == QString ("errors")) {
-            read_data_errors (main_TAF);
-        }
-        else if (reader.name () == QString ("warnings")) {
-            read_data_warnings (main_TAF);
-        }
-        else if (reader.name () == QString ("time_taken_ms")) {
-            read_time_taken_ms (main_TAF);
-        }
-        else if (reader.name () == QString ("data")) {
-            read_data (main_TAF);
-        }
-        // else             reader.skipCurrentElement ();
-    }
-
-    main_TAF->forecast_Title->print ();
+   
+    
 }
 void XMLParser::read_request_index (MainTAF* main_TAF)
 {
@@ -112,42 +122,7 @@ void XMLParser::read_data_num_results (MainTAF* main_TAF)
 
 void XMLParser::read_TAF (MainTAF* main_TAF)
 {
-    Q_ASSERT (reader.isStartElement () && reader.name () == QString ("TAF"));
-    while (reader.readNextStartElement ()) {
-        if (reader.name () == QString ("raw_text")) {
-            read_raw_text (main_TAF);
-        }
-        else if (reader.name () == QString ("station_id")) {
-            read_station_id (main_TAF);
-        }
-        else if (reader.name () == QString ("bulletin_time")) {
-            read_bulletin_time (main_TAF);
-        }
-        else if (reader.name () == QString ("issue_time")) {
-            read_issue_time (main_TAF);
-        }
-        else if (reader.name () == QString ("valid_time_from")) {
-            read_valid_time_from (main_TAF);
-        }
-        else if (reader.name () == QString ("valid_time_to")) {
-            read_valid_time_to (main_TAF);
-        }
-        else if (reader.name () == QString ("latitude")) {
-            read_latitude (main_TAF);
-        }
-        else if (reader.name () == QString ("longitude")) {
-            read_longitude (main_TAF);
-        }
-        else if (reader.name () == QString ("elevation_m")) {
-            read_elevation_m (main_TAF);
-        }
-        else if (reader.name () == QString ("forecast")) {
-            read_forecast (main_TAF);
-        }
-
-        // else             reader.skipCurrentElement ();
-    }
-    main_TAF->forecast_TAF->print ();
+    
 }
 void XMLParser::read_raw_text (MainTAF* main_TAF)
 {
@@ -201,62 +176,8 @@ void XMLParser::read_elevation_m (MainTAF* main_TAF)
 }
 void XMLParser::read_forecast (MainTAF* main_TAF)
 {
-    Q_ASSERT (reader.isStartElement () && reader.name () == QString ("forecast"));
-    while (reader.readNextStartElement ()) {
-        if (reader.name () == QString ("fcst_time_from")) {
-            read_fcst_time_from (main_TAF);
-        }
-        else if (reader.name () == QString ("fcst_time_to")) {
-            read_fcst_time_to (main_TAF);
-        }
-        else if (reader.name () == QString ("change_indicator")) {
-            read_change_indicator (main_TAF);
-        }
-        else if (reader.name () == QString ("time_becoming")) {
-            read_time_becoming (main_TAF);
-        }
-        else if (reader.name () == QString ("probability")) {
-            read_probability (main_TAF);
-        }
-        else if (reader.name () == QString ("wind_dir_degrees")) {
-            read_wind_dir_degrees (main_TAF);
-        }
-        else if (reader.name () == QString ("wind_speed_kt")) {
-            read_wind_speed_kt (main_TAF);
-        }
-        else if (reader.name () == QString ("wind_gust_kt")) {
-            read_wind_gust_kt (main_TAF);
-        }
-        else if (reader.name () == QString ("wind_shear_hgt_ft_agl")) {
-            read_wind_shear_hgt_ft_agl (main_TAF);
-        }
-        else if (reader.name () == QString ("wind_shear_dir_degrees")) {
-            read_wind_shear_dir_degrees (main_TAF);
-        }
-        else if (reader.name () == QString ("wind_shear_speed_kt")) {
-            read_wind_shear_speed_kt (main_TAF);
-        }
-        else if (reader.name () == QString ("visibility_statute_mi")) {
-            read_visibility_statute_mi (main_TAF);
-        }
-        else if (reader.name () == QString ("altim_in_hg")) {
-            read_altim_in_hg (main_TAF);
-        }
-        else if (reader.name () == QString ("vert_vis_ft")) {
-            read_vert_vis_ft (main_TAF);
-        }
-        else if (reader.name () == QString ("wx_string")) {
-            read_wx_string (main_TAF);
-        }
-        else if (reader.name () == QString ("not_decoded")) {
-            read_not_decoded (main_TAF);
-        }
-        else if (reader.name () == QString ("sky_condition")) {
-            read_sky_condition (main_TAF);
-        }
-        else
-            reader.skipCurrentElement ();
-    }
+      
+    
 }
 void XMLParser::read_fcst_time_from (MainTAF* main_TAF)
 {
@@ -362,26 +283,7 @@ void XMLParser::read_sky_condition (MainTAF* main_TAF)
 }
 
 /*
-if (reader.name () == QString ("turbulence_condition")
-    && reader.attributes ().hasAttribute ("turbulence_intensity")
-    && reader.attributes ().hasAttribute ("turbulence_min_alt_ft_agl")
-    && reader.attributes ().hasAttribute ("turbulence_max_alt_ft_agl")) {
-    QString turbulence_intensity      = reader.attributes ().value ("turbulence_intensity").toString ();
-    QString turbulence_min_alt_ft_agl = reader.attributes ().value ("turbulence_min_alt_ft_agl").toString ();
-    QString turbulence_max_alt_ft_agl = reader.attributes ().value ("turbulence_max_alt_ft_agl").toString ();
 
-    reader.skipCurrentElement ();
-}
-if (reader.name () == QString ("icing_condition")
-    && reader.attributes ().hasAttribute ("icing_intensity")
-    && reader.attributes ().hasAttribute ("icing_min_alt_ft_agl")
-    && reader.attributes ().hasAttribute ("icing_max_alt_ft_agl")) {
-    QString icing_intensity      = reader.attributes ().value ("icing_intensity").toString ();
-    QString icing_min_alt_ft_agl = reader.attributes ().value ("icing_min_alt_ft_agl").toString ();
-    QString icing_max_alt_ft_agl = reader.attributes ().value ("icing_max_alt_ft_agl").toString ();
-
-    reader.skipCurrentElement ();
-}
 if (reader.name () == QString ("temperature")
     && reader.attributes ().hasAttribute ("valid_time")
     && reader.attributes ().hasAttribute ("sfc_temp_c")
