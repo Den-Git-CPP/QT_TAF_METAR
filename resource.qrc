@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>resource/avia.png</file>
+        <file>resource/file.xml</file>
     </qresource>
 </RCC>
