@@ -2,10 +2,11 @@
 #include <QDebug>
 #include <QObject>
 
-class Forecast_Title : public QObject {
-    Q_OBJECT
+class Forecast_Title {
+
   public:
-    explicit Forecast_Title (QObject* parent = nullptr);
+    explicit Forecast_Title ();
+    ~Forecast_Title ();
     QString request_index () const { return _request_index; };
     QString name () const { return _name; };
     QString type () const { return _type; };
@@ -20,11 +21,8 @@ class Forecast_Title : public QObject {
     void set_erorrs (const QStringList& errors_list) { this->_erorrs = errors_list; };
     void set_warnings (const QStringList& warnings_list) { this->_warnings = warnings_list; };
 
-    void print ();
-
-  signals:
   private:
-    QString _request_index;
+    QString _request_index{};
     QString _name;
     QString _type;
     QStringList _erorrs;

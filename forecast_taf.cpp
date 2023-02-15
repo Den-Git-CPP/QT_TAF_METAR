@@ -1,18 +1,11 @@
 #include "forecast_taf.h"
 
-Forecast_TAF::Forecast_TAF (QObject* parent) { forecast = new Forecast (); }
+Forecast_TAF::Forecast_TAF () {}
 
-void Forecast_TAF::print ()
+Forecast_TAF::~Forecast_TAF () {}
+
+void Forecast_TAF::add_forecast (Forecast in_forecast)
 {
-    qDebug () << _raw_text << "\n"
-              << _station_id << "\n"
-              << _issue_time << "\n"
-              << _bulletin_time << "\n"
-              << _valid_time_from << "\n"
-              << _valid_time_to << "\n"
-              << _remarks << "\n"
-              << _latitude << "\n"
-              << _longitude << "\n"
-              << _elevation_m << "\n";
-    qDebug () << "Forecast_TAF END";
+    //
+    forecasts.push_back (in_forecast);
 }
