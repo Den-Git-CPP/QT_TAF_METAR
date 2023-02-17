@@ -1,12 +1,15 @@
 
 #include "xmlparser.h"
 
-XMLParser::XMLParser () {}
+XMLParser::XMLParser (QObject* parent) : QObject (parent) { _main_taf = new MainTAF; }
+
+XMLParser::XMLParser (MainTAF* in_main_taf) {}
 
 XMLParser::~XMLParser () { delete _main_taf; }
-void XMLParser::Read ()
+
+void XMLParser::Read_XML ()
 {
-    QFile file (":/resource/file.xml");
+    QFile file ("./file.xml");
     if (!file.open (QFile::ReadOnly | QFile::Text)) {
         qDebug () << "Cannot read file" << file.errorString ();
         exit (0);
@@ -74,13 +77,13 @@ void XMLParser::Read ()
         qDebug () << reader.errorString ();
         return;
     }
-    qDebug () << "READ_END";
+
+    // qDebug () << "READ_END";
 }
 
 void XMLParser::read_TAF ()
 {
-    Forecast_TAF* newTAF = nullptr;
-    newTAF               = new Forecast_TAF;
+    Forecast_TAF* newTAF = new Forecast_TAF;
 
     while (reader.readNextStartElement ()) {
         if (reader.name ().toString () == "raw_text") {
@@ -139,8 +142,7 @@ void XMLParser::read_TAF ()
 
 void XMLParser::read_forecast (Forecast_TAF* inTAF)
 {
-    Forecast* forecast = nullptr;
-    forecast           = new Forecast;
+    Forecast* forecast = new Forecast;
 
     while (reader.readNextStartElement ()) {
         if (reader.name ().toString () == "fcst_time_from") {
@@ -245,10 +247,4 @@ void XMLParser::read_forecast (Forecast_TAF* inTAF)
     delete forecast;
 }
 
-// MainTAF XMLParser::get (MainTAF* IN_main_taf)
-//{
-//     _main_taf = new MainTAF;
-//     Read ();
-//     std::swap (_main_taf, IN_main_taf);
-//     return *IN_main_taf;
-// }
+MainTAF* XMLParser::get_inf_from_parser () { return _main_taf; }

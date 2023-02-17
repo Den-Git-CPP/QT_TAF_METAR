@@ -10,7 +10,6 @@ class Forecast_TAF {
   public:
     explicit Forecast_TAF ();
     ~Forecast_TAF ();
-
     QString raw_text () const;
     QString station_id () const;
     QString issue_time () const;

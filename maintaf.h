@@ -5,10 +5,10 @@
 #include <QObject>
 #include <QVector>
 
-class MainTAF {
-
+class MainTAF : public QObject {
+    Q_OBJECT
   public:
-    explicit MainTAF ();
+    explicit MainTAF (QObject* parent = nullptr);
     ~MainTAF ();
     Forecast_Title* Title = nullptr;
 

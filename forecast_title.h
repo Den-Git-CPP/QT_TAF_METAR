@@ -3,7 +3,6 @@
 #include <QObject>
 
 class Forecast_Title {
-
   public:
     explicit Forecast_Title ();
     ~Forecast_Title ();

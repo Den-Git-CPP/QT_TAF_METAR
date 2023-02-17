@@ -7,19 +7,19 @@
 #include <QXmlSimpleReader>
 #include <QXmlStreamReader>
 
-class XMLParser {
-
+class XMLParser : public QObject {
+    Q_OBJECT
   public:
-    XMLParser ();
-
+    explicit XMLParser (QObject* parent = nullptr);
+    explicit XMLParser (MainTAF* in_main_taf);
     ~XMLParser ();
 
     void read_TAF ();
     void read_forecast (Forecast_TAF* inTAF);
-    // MainTAF get (MainTAF* IN_main_taf);
+    MainTAF* get_inf_from_parser ();
 
   public slots:
-    void Read ();
+    void Read_XML ();
 
   private:
     QXmlStreamReader reader;
