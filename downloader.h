@@ -9,19 +9,23 @@
 #include <QUrl>
 
 class Downloader : public QObject {
-    Q_OBJECT
-  public:
-    explicit Downloader (QObject* parent = nullptr);
-  signals:
-    void onReady ();
+  Q_OBJECT
+public:
+  explicit Downloader(QObject *parent = nullptr);
+  QString get_name_airport();
+  QString get_dir_file_with_xml_for_parser();
 
-  public slots:
-    void getData ();
-    void onResult (QNetworkReply* reply);
-    void set_name_airport (QString const& name);
-    QString get_name_airport ();
+  void set_name_airport(QString const &name);
 
-  private:
-    QNetworkAccessManager* manager;
-    QString _name_airport{ "" };
+signals:
+  void onReady();
+
+public slots:
+  void getData();
+  void onResult(QNetworkReply *reply);
+
+private:
+  QNetworkAccessManager *manager;
+  QString _name_airport{""};
+  QString _dir_file_with_xml_for_parser{""};
 };

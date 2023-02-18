@@ -8,20 +8,20 @@
 #include <QXmlStreamReader>
 
 class XMLParser : public QObject {
-    Q_OBJECT
-  public:
-    explicit XMLParser (QObject* parent = nullptr);
-    explicit XMLParser (MainTAF* in_main_taf);
-    ~XMLParser ();
+  Q_OBJECT
+public:
+  explicit XMLParser(QObject *parent = nullptr);
+  explicit XMLParser(MainTAF *main_taf_);
+  ~XMLParser();
+  void set_dir_file_with_xml(QString const &dir);
+  void read_TAF();
+  void read_forecast(Forecast_TAF *inTAF);
 
-    void read_TAF ();
-    void read_forecast (Forecast_TAF* inTAF);
-    MainTAF* get_inf_from_parser ();
+public slots:
+  void Read_XML();
 
-  public slots:
-    void Read_XML ();
-
-  private:
-    QXmlStreamReader reader;
-    MainTAF* _main_taf = nullptr;
+private:
+  QXmlStreamReader reader;
+  MainTAF *_main_taf = nullptr;
+  QString _dir_file_with_xml{""};
 };

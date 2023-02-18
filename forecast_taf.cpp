@@ -5,7 +5,7 @@ Forecast_TAF::Forecast_TAF() {}
 Forecast_TAF::~Forecast_TAF() {}
 
 QString Forecast_TAF::raw_text() const { return this->_raw_text; }
-QString Forecast_TAF::station_id() const { return this->_raw_text; }
+QString Forecast_TAF::station_id() const { return this->_station_id; }
 QString Forecast_TAF::issue_time() const { return this->_issue_time; }
 QString Forecast_TAF::bulletin_time() const { return this->_bulletin_time; }
 QString Forecast_TAF::valid_time_from() const { return this->_valid_time_from; }
