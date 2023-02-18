@@ -59,7 +59,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     this->setLayout (vbox);
 
     timer_show_weather = new QTimer (this);
-    timer_show_weather->setInterval (60000); // интервал 120 сек
+    timer_show_weather->setInterval (20000); // интервал 10 сек
     connect (timer_show_weather, &QTimer::timeout, this, &Widget::Show_weather);
     timer_show_weather->start ();
 }
@@ -68,11 +68,11 @@ Widget::~Widget () { delete weather; }
 
 void Widget::Show_weather ()
 {
-    //   emit this->bt_UUWW->clicked ();
-    weather = new lb_weather (); // класс запроса погоды
+    emit this->bt_UUWW->clicked ();
+    //    weather = new lb_weather (); // класс запроса погоды
 
-    weather->label->setText (downloader->get_name_airport ());
-    weather->label_forecast->setText (main_TAF->vec_taf.at (0).raw_text ());
+    //    weather->label->setText (downloader->get_name_airport ());
+    //    weather->label_forecast->setText (main_TAF->vec_taf.at (0).raw_text ());
 
-    weather->show ();
+    //    weather->show ();
 }
