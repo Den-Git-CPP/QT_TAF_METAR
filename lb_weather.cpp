@@ -8,21 +8,27 @@ lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
 
     icon = new QIcon (":/resource/avia.png");
     this->setWindowIcon (*icon); // Значок для окна
+                                 // style
 
-    label          = new QLabel ();
-    label_forecast = new QLabel ();
-    label->setText (name_airport);
-    label_forecast->setText ("Погода:" + Forecast_on_airport);
+    label_name_airport = new QLabel (this);
+    label_forecast     = new QLabel ("Погода:", this);
 
-    QVBoxLayout* vbox = new QVBoxLayout ();
-    vbox->addWidget (label);
+    QVBoxLayout* vbox = new QVBoxLayout (this);
+    vbox->addWidget (label_name_airport);
     vbox->addWidget (label_forecast);
-
     this->setLayout (vbox);
+}
 
-    qDebug () << "Show weather" << QTime::currentTime ().toString (); /*  */
+lb_weather::~lb_weather () {}
+
+void lb_weather::set_name_airport (QString name_airport_) { label_name_airport->setText (name_airport_); }
+
+void lb_weather::set_text_forecast (QString text_forecast_) { label_forecast->setText ("Погода:" + text_forecast_); }
+
+void lb_weather::start_close_timer ()
+{
     timer_close_weather = new QTimer (this);
-    timer_close_weather->setInterval (10000); // интервал 60 сек
+    timer_close_weather->setInterval (10000); // интервал 10 сек
     timer_close_weather->setSingleShot (true);
 
     connect (timer_close_weather, &QTimer::timeout, [=] {
@@ -32,5 +38,3 @@ lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
 
     timer_close_weather->start ();
 }
-
-void lb_weather::set_name_airport (QString name_airport_) { name_airport = name_airport_; }
