@@ -74,7 +74,6 @@ void XMLParser::Read_XML ()
             }
         }
     } // while end file
-
     if (reader.hasError ()) {
         qDebug () << reader.errorString ();
         return;
