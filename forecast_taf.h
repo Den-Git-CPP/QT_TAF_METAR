@@ -1,11 +1,11 @@
 #pragma once
 #include "forecast.h"
-
+#include "function.h"
 #include <QDebug>
 #include <QObject>
 #include <QVector>
 
-class Forecast_TAF {
+class Forecast_TAF : private Function {
 
 public:
   explicit Forecast_TAF();
@@ -37,7 +37,7 @@ public:
   void add_forecast(Forecast in_forecast);
 
 private:
-  QString _raw_text;
+  QString _raw_text{};
   QString _station_id{};
   QString _issue_time{};
   QString _bulletin_time{};

@@ -13,6 +13,7 @@
 #include <QWidget>
 
 #include "downloader.h"
+
 #include "lb_weather.h"
 #include "maintaf.h"
 #include "xmlparser.h"

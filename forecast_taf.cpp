@@ -16,9 +16,11 @@ QString Forecast_TAF::longitude() const { return this->_longitude; }
 QString Forecast_TAF::elevation_m() const { return this->_elevation_m; }
 void Forecast_TAF::set_raw_text(const QString &raw_text) {
   this->_raw_text = raw_text;
+  Function::replace_raw_text(_raw_text);
 };
 void Forecast_TAF::set_station_id(const QString &station_id) {
   this->_station_id = station_id;
+  Function::replace_id_staion(_station_id);
 };
 void Forecast_TAF::set_issue_time(const QString &issue_time) {
   this->_issue_time = issue_time;

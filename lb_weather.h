@@ -8,20 +8,21 @@
 #include <QWidget>
 
 class lb_weather : public QWidget {
-    Q_OBJECT
-  public:
-    explicit lb_weather (QWidget* parent = nullptr);
-    ~lb_weather ();
-    void set_name_airport (QString name_airport_);
-    void set_text_forecast (QString text_forecast_);
+  Q_OBJECT
+public:
+  explicit lb_weather(QWidget *parent = nullptr);
+  ~lb_weather();
+  void set_name_airport(QString name_airport_);
+  void set_text_forecast(QString text_forecast_);
 
-  public slots:
-    void start_close_timer ();
+public slots:
+  void start_close_timer();
 
-  private:
-    QLabel* label_name_airport = nullptr;
-    QLabel* label_forecast     = nullptr;
+private:
+  QLabel *label_name_airport = nullptr;
+  QLabel *label_forecast = nullptr;
+  QLabel *label_3 = nullptr;
 
-    QIcon* icon                 = nullptr;
-    QTimer* timer_close_weather = nullptr;
+  QIcon *icon = nullptr;
+  QTimer *timer_close_weather = nullptr;
 };
