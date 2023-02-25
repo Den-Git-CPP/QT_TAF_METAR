@@ -2,7 +2,7 @@
 
 lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
 {
-    this->resize (300, 10);
+    this->resize (100, 10);
     this->setWindowTitle ("Погода в аэропорту");
     this->setWindowFlags (Qt::Window | Qt::WindowCloseButtonHint);
 

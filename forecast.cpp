@@ -25,6 +25,12 @@ QString Forecast::vert_vis_ft () const { return _vert_vis_ft; }
 QString Forecast::wx_string () const { return _wx_string; }
 QString Forecast::not_decoded () const { return _not_decoded; }
 
+QList<std::tuple<QString, QString, QString> > Forecast::tuple_list_sky_condition () const { return this->_tuple_list_sky_condition; }
+
+QList<std::tuple<QString, QString, QString> > Forecast::turbulence_list_condition () const { return this->_turbulence_list_condition; }
+
+QList<std::tuple<QString, QString, QString> > Forecast::icing_list_condition () const { return this->_icing_list_condition; }
+
 void Forecast::set_fcst_time_from (const QString& fcst_time_from)
 {
     this->_fcst_time_from = fcst_time_from;

@@ -26,6 +26,10 @@ class Forecast : private Function {
     QString wx_string () const;
     QString not_decoded () const;
 
+    QList<std::tuple<QString, QString, QString>> tuple_list_sky_condition () const;
+    QList<std::tuple<QString, QString, QString>> turbulence_list_condition () const;
+    QList<std::tuple<QString, QString, QString>> icing_list_condition () const;
+
     void set_fcst_time_from (const QString& fcst_time_from);
     void set_fcst_time_to (const QString& fcst_time_to);
     void set_change_indicator (const QString& change_indicator);

@@ -80,16 +80,15 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     this->setLayout (vbox);
 
-    //    timer_show_weather = new QTimer (this);
-    //    timer_show_weather->setInterval (15000); // интервал 15 сек
-    //    connect (timer_show_weather, &QTimer::timeout, this,
-    //    &Widget::Show_weather); timer_show_weather->start ();
+    timer_show_weather = new QTimer (this);
+    timer_show_weather->setInterval (15000); // интервал 15 сек
+    connect (timer_show_weather, &QTimer::timeout, this, &Widget::Show_weather);
+    timer_show_weather->start ();
 }
 
 Widget::~Widget () {}
 QString Widget::forming_text_forecast ()
 {
-
     QString _text_taf = "ПРОГНОЗ СОСТАВЛЕН: " + main_TAF->vec_taf.at (0).bulletin_time ();
     if (main_TAF->vec_taf.at (0).valid_time_from () != "") {
         _text_taf.append ("\nДЕЙСТВУЕТ С " + main_TAF->vec_taf.at (0).valid_time_from () + " ");
@@ -152,6 +151,28 @@ QString Widget::forming_text_forecast ()
         if (forecast.not_decoded () != "") {
             // НЕ ВЫВОДИТЬ :_text_forecasts.append ("\n Данные не расшифрованы:" + forecast.not_decoded () + " ");
         };
+        if (!forecast.tuple_list_sky_condition ().empty ()) {
+
+            for (auto elem : forecast.tuple_list_sky_condition ()) {
+                "\n" + _text_forecasts.append (QString (std::get<0> (elem))).append (" ");
+                "\n" + _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                "\n" + _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+            }
+        };
+        if (!forecast.turbulence_list_condition ().empty ()) {
+            for (auto elem : forecast.turbulence_list_condition ()) {
+                "\n" + _text_forecasts.append (QString (std::get<0> (elem))).append (" ");
+                "\n" + _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                "\n" + _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+            }
+        };
+        if (!forecast.icing_list_condition ().empty ()) {
+            for (auto elem : forecast.icing_list_condition ()) {
+                "\n" + _text_forecasts.append (QString (std::get<0> (elem))).append (" ");
+                "\n" + _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                "\n" + _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+            }
+        };
     }
     return _text_taf + _text_forecasts;
 }
@@ -160,15 +181,19 @@ void Widget::Show_weather ()
     switch (position_selection) {
         case 1:
             emit this->bt_UUWW->clicked ();
+            weather->move (10, 0);
             position_selection++;
             break;
         case 2:
             emit this->bt_UUDD->clicked ();
+            weather->move (300, 0);
             position_selection++;
             break;
         case 3:
             emit this->bt_UUEE->clicked ();
+            weather->move (600, 0);
             position_selection = 1;
+
             break;
     }
 }
