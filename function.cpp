@@ -1,5 +1,7 @@
 #include "function.h"
 
+#include <QList>
+
 Function::Function () {}
 
 QString Function::replace_id_staion (QString& _id_str)
@@ -39,18 +41,21 @@ QString Function::replace_change_indicator (QString& _change_indicator)
 }
 QString Function::replace_wx_string (QString& _wx_string)
 {
+    QList<QString> lst_weather_phenomenon{};
+    lst_weather_phenomenon = _wx_string.split (' ');
+    _wx_string.clear ();
 
-    QFile file (":/resource/AMOFSG_Dictionary.txt");
-    if (!file.open (QFile::ReadOnly | QFile::Text)) {
-        qDebug () << "Can't open file Dictionary AMOFSG_Dictionary.txt ";
-        exit (EXIT_FAILURE);
-    }
-    while (!file.atEnd ()) {
-        QString line  = file.readLine ();
-        QString line1 = line.section ('/', 0, 0);
-        QString line2 = line.section ('/', 1, 1);
-        line2.chop (1); // убрали /n
-        _wx_string.replace (line1, line2);
+    if ((!AMOFSG_Dictionary.empty ()) && (!lst_weather_phenomenon.empty ())) {
+
+        for (auto elem : lst_weather_phenomenon) {
+            try {
+                elem = AMOFSG_Dictionary.value (elem);
+            }
+            catch (const std::exception&) {
+                elem = "  КОД ЯВЛЕНИЯ ПОГОДЫ " + elem + " НЕ РАСШИФРОВАН";
+            }
+            _wx_string.append (elem + " ");
+        }
     }
 
     return _wx_string;
@@ -67,4 +72,21 @@ QString Function::convert_ft_to_m (QString& _ft_to_m)
 QString Function::convert_mi_to_m (QString& _mi_to_m)
 { //
     return _mi_to_m = QString::number (static_cast<int> (1609.1 * _mi_to_m.toDouble ()));
+}
+
+void Function::Load_AMOFSG_Dictionary ()
+{
+    QFile file (":/resource/AMOFSG_Dictionary.txt");
+    if (!file.open (QFile::ReadOnly | QFile::Text)) {
+        qDebug () << "Can't open file Dictionary AMOFSG_Dictionary.txt ";
+        exit (EXIT_FAILURE);
+    }
+
+    while (!file.atEnd ()) {
+        QString line  = file.readLine ();
+        QString line1 = line.section ('/', 0, 0);
+        QString line2 = line.section ('/', 1, 1);
+        line2.chop (1); // убрали /n
+        AMOFSG_Dictionary [line1] = line2;
+    }
 }

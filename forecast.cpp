@@ -1,6 +1,11 @@
 #include "forecast.h"
 
-Forecast::Forecast () {}
+Forecast::Forecast ()
+{
+    //
+    Function::Load_AMOFSG_Dictionary ();
+}
+
 Forecast::~Forecast () {}
 
 QString Forecast::fcst_time_from () const { return _fcst_time_from; }

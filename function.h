@@ -1,9 +1,9 @@
 #pragma once
 #include <QDateTime>
 #include <QFile>
+#include <QMap>
 #include <QString>
 #include <QTextStream>
-
 class Function {
   public:
     Function ();
@@ -19,4 +19,6 @@ class Function {
     QString convert_kt_to_ms (QString& _kt_to_ms);
     QString convert_ft_to_m (QString& _ft_to_m);
     QString convert_mi_to_m (QString& mi_to_m);
+    QMap<QString, QString> AMOFSG_Dictionary;
+    void Load_AMOFSG_Dictionary ();
 };
