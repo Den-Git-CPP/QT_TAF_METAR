@@ -17,7 +17,7 @@ lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
 
     label_forecast = new QLabel (this);
     label_forecast->setStyleSheet ("QLabel {"
-                                   "font-size: 15px; "
+                                   "font-size: 14px; "
                                    "font-weight: bold;"
                                    "}");
 
@@ -47,7 +47,7 @@ void lb_weather::set_text_forecast (QString text_forecast_) { label_forecast->se
 void lb_weather::start_close_timer ()
 {
     timer_close_weather = new QTimer (this);
-    timer_close_weather->setInterval (10000); // интервал 10 сек
+    timer_close_weather->setInterval (100000); // интервал 10 сек
     timer_close_weather->setSingleShot (true);
 
     connect (timer_close_weather, &QTimer::timeout, [=] {

@@ -187,7 +187,7 @@ void XMLParser::read_forecast (Forecast_TAF* inTAF)
         }
         else if (reader.name ().toString () == "visibility_statute_mi") {
             Q_ASSERT (reader.name () == QString ("visibility_statute_mi"));
-            forecast->set_wind_shear_speed_kt (reader.readElementText ());
+            forecast->set_visibility_statute_mi (reader.readElementText ());
         }
         else if (reader.name ().toString () == "altim_in_hg") {
             Q_ASSERT (reader.name () == QString ("altim_in_hg"));

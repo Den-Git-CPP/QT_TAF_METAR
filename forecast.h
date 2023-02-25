@@ -1,5 +1,6 @@
 #include "function.h"
 #include <QDebug>
+#include <QMap>
 #include <QString>
 #include <tuple>
 #pragma once
@@ -69,6 +70,7 @@ class Forecast : private Function {
     QString _min_temp_c{};
     */
     // sky_turbulence_icing_condition
+
     QList<std::tuple<QString, QString, QString>> _tuple_list_sky_condition;
     QList<std::tuple<QString, QString, QString>> _turbulence_list_condition;
     QList<std::tuple<QString, QString, QString>> _icing_list_condition;

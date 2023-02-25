@@ -74,7 +74,11 @@ void Forecast::set_vert_vis_ft (const QString& vert_vis_ft)
     this->_vert_vis_ft = vert_vis_ft;
     Function::convert_ft_to_m (_vert_vis_ft);
 }
-void Forecast::set_wx_string (const QString& wx_string) { this->_wx_string = wx_string; }
+void Forecast::set_wx_string (const QString& wx_string)
+{
+    this->_wx_string = wx_string;
+    Function::replace_wx_string (_wx_string);
+}
 void Forecast::set_not_decoded (const QString& not_decoded) { this->_not_decoded = not_decoded; }
 void Forecast::set_condition (const QString name_list_condion, const std::tuple<QString, QString, QString> node)
 {

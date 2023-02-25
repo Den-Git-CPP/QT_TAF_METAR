@@ -80,27 +80,81 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     this->setLayout (vbox);
 
-    timer_show_weather = new QTimer (this);
-    timer_show_weather->setInterval (15000); // интервал 15 сек
-    connect (timer_show_weather, &QTimer::timeout, this, &Widget::Show_weather);
-    timer_show_weather->start ();
+    //    timer_show_weather = new QTimer (this);
+    //    timer_show_weather->setInterval (15000); // интервал 15 сек
+    //    connect (timer_show_weather, &QTimer::timeout, this,
+    //    &Widget::Show_weather); timer_show_weather->start ();
 }
 
 Widget::~Widget () {}
-
 QString Widget::forming_text_forecast ()
 {
-    QString _text_taf = "Время составления прогноза: " + main_TAF->vec_taf.at (0).bulletin_time () + "\nДействует c "
-                      + main_TAF->vec_taf.at (0).valid_time_from () + +" по " + main_TAF->vec_taf.at (0).valid_time_to () + "\n"
-                      + main_TAF->vec_taf.at (0).raw_text ();
-    QString _text_forecasts{ "" };
-    for (auto forecast : main_TAF->vec_taf.at (0).forecasts) {
-        // forecast.
+    QString _text_taf = "ПРОГНОЗ СОСТАВЛЕН: " + main_TAF->vec_taf.at (0).bulletin_time ();
+
+    if (main_TAF->vec_taf.at (0).valid_time_from () != "") {
+        _text_taf.append ("\nДЕЙСТВУЕТ С " + main_TAF->vec_taf.at (0).valid_time_from () + " ");
+    }
+    if (main_TAF->vec_taf.at (0).valid_time_to () != "") {
+        _text_taf.append ("ПО " + main_TAF->vec_taf.at (0).valid_time_to ());
+    }
+    if (main_TAF->vec_taf.at (0).raw_text () != "") {
+        _text_taf.append ("\n\n" + main_TAF->vec_taf.at (0).raw_text ());
     }
 
-    return _text_taf + "\n" + _text_forecasts;
+    QString _text_forecasts{ "" }, _text_forecast_tmp{ "" };
+    for (auto forecast : main_TAF->vec_taf.at (0).forecasts) {
+        if (forecast.fcst_time_from () != "") {
+            _text_forecast_tmp.append ("\n\n-В период с " + forecast.fcst_time_from () + " ");
+        }
+        if (forecast.fcst_time_to () != "") {
+            _text_forecast_tmp.append ("по " + forecast.fcst_time_to ());
+        }
+        if (forecast.change_indicator () != "") {
+            _text_forecast_tmp.append ("\n    " + forecast.change_indicator () + " ");
+        }
+        if (forecast.time_becoming () != "") {
+            _text_forecast_tmp.append ("начиная с " + forecast.time_becoming () + " ");
+        }
+        if (forecast.probability () != "") {
+            _text_forecast_tmp.append ("\nс вероятностью" + forecast.probability ());
+        }
+        if (forecast.wind_dir_degrees () != "") {
+            _text_forecast_tmp.append ("\n    Ветер: " + forecast.wind_dir_degrees () + "° ");
+        }
+        if (forecast.wind_speed_kt () != "") {
+            _text_forecast_tmp.append (forecast.wind_speed_kt () + " м/с ");
+        }
+        if (forecast.wind_gust_kt () != "") {
+            _text_forecast_tmp.append (" (порывы " + forecast.wind_gust_kt () + " м/с)");
+        };
+        if (forecast.wind_shear_hgt_ft_agl () != "") {
+            _text_forecast_tmp.append ("\n    Сдвиг ветера на " + forecast.wind_shear_hgt_ft_agl () + "м. ");
+        };
+        if (forecast.wind_shear_dir_degrees () != "") {
+            _text_forecast_tmp.append (forecast.wind_shear_dir_degrees () + "° ");
+        };
+        if (forecast.wind_shear_speed_kt () != "") {
+            _text_forecast_tmp.append (forecast.wind_shear_speed_kt () + " м/с ");
+        };
+        // видимость
+        if (forecast.visibility_statute_mi () != "") {
+            _text_forecast_tmp.append ("\n    Видимость: " + forecast.visibility_statute_mi () + " м. ");
+        };
+        if (forecast.altim_in_hg () != "") {
+            _text_forecast_tmp.append ("\n    Нижняя граница облачности:" + forecast.altim_in_hg () + " м. ");
+        };
+        if (forecast.vert_vis_ft () != "") {
+            _text_forecast_tmp.append ("\n    Вертикальная видимость:" + forecast.vert_vis_ft () + " м. ");
+        };
+        if (forecast.wx_string () != "") {
+            _text_forecast_tmp.append ("\n    " + forecast.wx_string () + " ");
+        };
+        if (forecast.not_decoded () != "") {
+            // НЕ ВЫВОДИТЬ :_text_forecast_tmp.append ("\n Данные не расшифрованы:" + forecast.not_decoded () + " ");
+        };
+    }
+    return _text_taf + _text_forecast_tmp;
 }
-
 void Widget::Show_weather ()
 {
     switch (position_selection) {

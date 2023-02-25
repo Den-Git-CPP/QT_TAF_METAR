@@ -1,5 +1,7 @@
 #include "function.h"
 
+Function::Function () {}
+
 QString Function::replace_id_staion (QString& _id_str)
 {
     if (_id_str == "UUWW") {
@@ -17,16 +19,16 @@ QString Function::replace_raw_text (QString& _raw_text)
 {
     _raw_text.replace ("TEMPO", "\n       TEMPO ");
     _raw_text.replace ("BECMG", "\n       BECMG ");
-    _raw_text.replace ("FM", "\n       FM ");
+    _raw_text.replace ("FM", "\n       FM\t ");
     return _raw_text;
 }
-QString Function::replace_time (QString& _bulletin_time)
+QString Function::replace_time (QString& _time)
 {
     // 2023-02-25T05:00:00Z
     QString format  = "yyyy-MM-ddThh:mm:ssZ";
-    QDateTime valid = QDateTime::fromString (_bulletin_time, format);
-    _bulletin_time  = valid.time ().toString ("hh:mm") + " " + valid.date ().toString ("dd.MM.yyyy");
-    return _bulletin_time;
+    QDateTime valid = QDateTime::fromString (_time, format);
+    _time           = valid.time ().toString ("hh:mm") + "z  " + valid.date ().toString ("dd.MM.yyyy");
+    return _time;
 }
 QString Function::replace_change_indicator (QString& _change_indicator)
 {
@@ -35,9 +37,34 @@ QString Function::replace_change_indicator (QString& _change_indicator)
     _change_indicator.replace ("FM", "ИЗМЕНЕНИЯ: ");
     return _change_indicator;
 }
+QString Function::replace_wx_string (QString& _wx_string)
+{
 
-QString Function::convert_kt_to_ms (QString& _kt_to_ms) { return QString::number (_kt_to_ms.toDouble () * 0.514444); }
+    QFile file (":/resource/AMOFSG_Dictionary.txt");
+    if (!file.open (QFile::ReadOnly | QFile::Text)) {
+        qDebug () << "Can't open file Dictionary AMOFSG_Dictionary.txt ";
+        exit (EXIT_FAILURE);
+    }
+    while (!file.atEnd ()) {
+        QString line  = file.readLine ();
+        QString line1 = line.section ('/', 0, 0);
+        QString line2 = line.section ('/', 1, 1);
+        line2.chop (1); // убрали /n
+        _wx_string.replace (line1, line2);
+    }
 
-QString Function::convert_ft_to_m (QString& _ft_to_m) { return QString::number (_ft_to_m.toDouble () * 0.3048); }
-
-QString Function::convert_mi_to_m (QString& _mi_to_m) { return QString::number (_mi_to_m.toDouble () * 1609.1); }
+    return _wx_string;
+}
+QString Function::convert_kt_to_ms (QString& _kt_to_ms)
+{
+    //
+    return _kt_to_ms = QString::number (static_cast<int> (0.514444 * _kt_to_ms.toDouble ()));
+}
+QString Function::convert_ft_to_m (QString& _ft_to_m)
+{ //
+    return _ft_to_m = QString::number (static_cast<int> (0.3048 * _ft_to_m.toDouble ()));
+}
+QString Function::convert_mi_to_m (QString& _mi_to_m)
+{ //
+    return _mi_to_m = QString::number (static_cast<int> (1609.1 * _mi_to_m.toDouble ()));
+}
