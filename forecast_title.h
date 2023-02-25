@@ -13,17 +13,11 @@ class Forecast_Title {
     QString num_results () const;
 
     void set_request_index (const QString& request_index);
-
     void set_name (const QString& name);
-
     void set_type (const QString& type);
-
     void set_time_taken_ms (const QString& time_taken_ms);
-
     void set_num_results (const QString& num_results);
-
     void set_erorrs (const QStringList& errors_list);
-
     void set_warnings (const QStringList& warnings_list);
 
   private:

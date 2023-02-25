@@ -1,9 +1,9 @@
+#include "function.h"
 #include <QDebug>
 #include <QString>
 #include <tuple>
-
 #pragma once
-class Forecast {
+class Forecast : private Function {
   public:
     Forecast ();
     ~Forecast ();

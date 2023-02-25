@@ -42,6 +42,7 @@ class Widget : public QWidget {
     XMLParser* xmlparser       = nullptr;
     MainTAF* main_TAF          = nullptr;
 
+    QString forming_text_forecast ();
     int position_selection{ 1 };
     void Show_weather ();
 };

@@ -21,7 +21,6 @@ public slots:
 private:
   QLabel *label_name_airport = nullptr;
   QLabel *label_forecast = nullptr;
-  QLabel *label_3 = nullptr;
 
   QIcon *icon = nullptr;
   QTimer *timer_close_weather = nullptr;
