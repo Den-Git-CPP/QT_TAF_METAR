@@ -35,3 +35,9 @@ QString Function::replace_change_indicator (QString& _change_indicator)
     _change_indicator.replace ("FM", "ИЗМЕНЕНИЯ: ");
     return _change_indicator;
 }
+
+QString Function::convert_kt_to_ms (QString& _kt_to_ms) { return QString::number (_kt_to_ms.toDouble () * 0.514444); }
+
+QString Function::convert_ft_to_m (QString& _ft_to_m) { return QString::number (_ft_to_m.toDouble () * 0.3048); }
+
+QString Function::convert_mi_to_m (QString& _mi_to_m) { return QString::number (_mi_to_m.toDouble () * 1609.1); }
