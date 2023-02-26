@@ -31,7 +31,7 @@ class Widget : public QWidget {
 
     QFont* ft            = nullptr;
     QPalette* pa         = nullptr;
-    QIcon* icon          = nullptr;
+    QIcon* icon1         = nullptr;
     QPushButton* bt_UUWW = nullptr;
     QPushButton* bt_UUDD = nullptr;
     QPushButton* bt_UUEE = nullptr;

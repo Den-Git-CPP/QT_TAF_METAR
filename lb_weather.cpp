@@ -2,11 +2,12 @@
 
 lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
 {
-    this->resize (100, 10);
+
+    this->resize (100, 100);
     this->setWindowTitle ("Погода в аэропорту");
     this->setWindowFlags (Qt::Window | Qt::WindowCloseButtonHint);
 
-    icon = new QIcon (":/resource/avia.png");
+    icon = new QIcon (":/resource/meteo.ico");
     this->setWindowIcon (*icon); // Значок для окна
     label_name_airport = new QLabel (this);
     label_name_airport->setStyleSheet ("QLabel {"
@@ -29,9 +30,12 @@ lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
     vbox->setAlignment (Qt::AlignTop);
     vbox->setContentsMargins (5, 1, 5, 0);
     vbox->addWidget (label_name_airport, 1, Qt::AlignTop);
+    vbox->addStretch (0);
     vbox->addWidget (label_forecast, 1, Qt::AlignTop);
-
+    vbox->addSpacing (10);
     this->setLayout (vbox);
+
+    this->move (100, 100);
 }
 
 lb_weather::~lb_weather () {}

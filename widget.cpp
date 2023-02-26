@@ -6,8 +6,8 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     this->setWindowTitle ("Запрос погоды");
     this->setWindowFlags (Qt::Window | Qt::WindowCloseButtonHint);
 
-    icon = new QIcon (":/resource/avia.png");
-    this->setWindowIcon (*icon); // Значок для окна
+    icon1 = new QIcon ("./resource/meteo.ico");
+    this->setWindowIcon (*icon1); // Значок для окна
 
     label = new QLabel (this);
     ft    = new QFont ("Arial", 12, QFont::Bold); // Устанавливаем размер шрифта
