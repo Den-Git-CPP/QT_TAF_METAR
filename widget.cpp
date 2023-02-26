@@ -151,12 +151,13 @@ QString Widget::forming_text_forecast ()
         if (forecast.not_decoded () != "") {
             // НЕ ВЫВОДИТЬ :_text_forecasts.append ("\n Данные не расшифрованы:" + forecast.not_decoded () + " ");
         };
+
         if (!forecast.tuple_list_sky_condition ().empty ()) {
 
             for (auto elem : forecast.tuple_list_sky_condition ()) {
-                "\n" + _text_forecasts.append (QString (std::get<0> (elem))).append (" ");
-                "\n" + _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-                "\n" + _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+                _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
             }
         };
         if (!forecast.turbulence_list_condition ().empty ()) {

@@ -21,4 +21,11 @@ class Function {
     QString convert_mi_to_m (QString& mi_to_m);
     QMap<QString, QString> AMOFSG_Dictionary;
     void Load_AMOFSG_Dictionary ();
+    QString replace_sky_cover (QString& sky_cover_);
+    QString replace_cloud_type (QString& cloud_type_);
+    void replace_tuple_list_sky_condition (QList<std::tuple<QString, QString, QString>>& tuple_list_sky_condition);
+
+    QList<std::tuple<QString, QString, QString>> replace_turbulence_list_condition (QList<std::tuple<QString, QString, QString>>& turbulence_list_condition_);
+
+    QList<std::tuple<QString, QString, QString>> replace_icing_list_condition (QList<std::tuple<QString, QString, QString>>& icing_list_condition_);
 };
