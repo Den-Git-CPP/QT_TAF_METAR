@@ -21,7 +21,7 @@ QString Forecast::vert_vis_ft () const { return _vert_vis_ft; }
 QString Forecast::wx_string () const { return _wx_string; }
 QString Forecast::not_decoded () const { return _not_decoded; }
 
-QList<std::tuple<QString, QString, QString> > Forecast::tuple_list_sky_condition () { return this->_tuple_list_sky_condition; }
+QList<std::tuple<QString, QString, QString> > Forecast::tuple_list_sky_condition () const { return this->_tuple_list_sky_condition; }
 QList<std::tuple<QString, QString, QString> > Forecast::turbulence_list_condition () const { return this->_turbulence_list_condition; }
 QList<std::tuple<QString, QString, QString> > Forecast::icing_list_condition () const { return this->_icing_list_condition; }
 
@@ -85,23 +85,22 @@ void Forecast::set_wx_string (const QString& wx_string)
     Function::replace_wx_string (_wx_string);
 }
 void Forecast::set_not_decoded (const QString& not_decoded) { this->_not_decoded = not_decoded; }
-void Forecast::set_condition (const QString name_list_condion, const std::tuple<QString, QString, QString> node)
+void Forecast::set_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node)
 {
     if (name_list_condion == "sky_condition") {
+
+        Function::replace_tuple_sky_condition (node);
         this->_tuple_list_sky_condition.append (node);
     }
     else if (name_list_condion == "turbulence_condition") {
+        Function::replace_turbulence_condition (node);
         this->_turbulence_list_condition.append (node);
     }
-
     else if (name_list_condion == "icing_condition") {
+        Function::replace_icing_condition (node);
         this->_icing_list_condition.append (node);
     }
     else {
         qDebug () << "Condition not known";
     }
-
-    // Function::replace_tuple_list_sky_condition (_tuple_list_sky_condition);
-    //  Function::replace_turbulence_list_condition (_turbulence_list_condition);
-    // Function::replace_icing_list_condition (_icing_list_condition);
 }

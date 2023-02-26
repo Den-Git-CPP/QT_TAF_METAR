@@ -162,16 +162,16 @@ QString Widget::forming_text_forecast ()
         };
         if (!forecast.turbulence_list_condition ().empty ()) {
             for (auto elem : forecast.turbulence_list_condition ()) {
-                "\n" + _text_forecasts.append (QString (std::get<0> (elem))).append (" ");
-                "\n" + _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-                "\n" + _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+                _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
             }
         };
         if (!forecast.icing_list_condition ().empty ()) {
             for (auto elem : forecast.icing_list_condition ()) {
-                "\n" + _text_forecasts.append (QString (std::get<0> (elem))).append (" ");
-                "\n" + _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-                "\n" + _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+                _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
             }
         };
     }

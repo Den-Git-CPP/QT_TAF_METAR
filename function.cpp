@@ -114,34 +114,25 @@ QString Function::replace_cloud_type (QString& cloud_type_)
     return cloud_type_;
 }
 
-void Function::replace_tuple_list_sky_condition (QList<std::tuple<QString, QString, QString> >& tuple_list_sky_condition_)
+void Function::replace_tuple_sky_condition (std::tuple<QString, QString, QString>& tuple_list_sky_condition_)
 {
-    for (auto& elem : tuple_list_sky_condition_) {
-        replace_sky_cover (std::get<0> (elem));
-        convert_ft_to_m (std::get<1> (elem));
-        replace_cloud_type (std::get<2> (elem));
-    }
+    replace_sky_cover (std::get<0> (tuple_list_sky_condition_));
+    convert_ft_to_m (std::get<1> (tuple_list_sky_condition_));
+    replace_cloud_type (std::get<2> (tuple_list_sky_condition_));
 }
 
-QList<std::tuple<QString, QString, QString> > Function::replace_turbulence_list_condition (QList<std::tuple<QString, QString, QString> >& turbulence_list_condition_)
+void Function::replace_turbulence_condition (std::tuple<QString, QString, QString>& turbulence_list_condition_)
 { // turbulence_intensity [0-9]
   // turbulence_min_alt_ft_agl
   // turbulence_max_alt_ft_agl
-    for (auto elem : turbulence_list_condition_) {
-        std::get<1> (elem) = convert_ft_to_m (std::get<1> (elem));
-        std::get<2> (elem) = convert_ft_to_m (std::get<2> (elem));
-    }
-
-    return turbulence_list_condition_;
+    convert_ft_to_m (std::get<1> (turbulence_list_condition_));
+    convert_ft_to_m (std::get<2> (turbulence_list_condition_));
 }
 
-QList<std::tuple<QString, QString, QString> > Function::replace_icing_list_condition (QList<std::tuple<QString, QString, QString> >& icing_list_condition_)
+void Function::replace_icing_condition (std::tuple<QString, QString, QString>& icing_list_condition_)
 { // icing_intensity [0-9]
     // icing_min_alt_ft_agl
     // icing_max_alt_ft_agl
-    for (auto elem : icing_list_condition_) {
-        std::get<1> (elem) = convert_ft_to_m (std::get<1> (elem));
-        std::get<2> (elem) = convert_ft_to_m (std::get<2> (elem));
-    }
-    return icing_list_condition_;
+    convert_ft_to_m (std::get<1> (icing_list_condition_));
+    convert_ft_to_m (std::get<2> (icing_list_condition_));
 }

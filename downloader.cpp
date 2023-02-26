@@ -28,7 +28,7 @@ void Downloader::onResult (QNetworkReply* reply)
         if (file->open (QFile::WriteOnly)) {
             file->write (reply->readAll ());
             file->close ();
-            qDebug () << "Downloading is completed";
+            //   qDebug () << "Downloading is completed";
             emit onReady ();
         }
     }
