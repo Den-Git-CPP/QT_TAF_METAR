@@ -81,7 +81,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     this->setLayout (vbox);
 
     timer_show_weather = new QTimer (this);
-    timer_show_weather->setInterval (15000); // интервал 15 сек
+    timer_show_weather->setInterval (600000); // интервал 10 мин
     connect (timer_show_weather, &QTimer::timeout, this, &Widget::Show_weather);
     timer_show_weather->start ();
 }
@@ -139,6 +139,16 @@ QString Widget::forming_text_forecast ()
         if (forecast.visibility_statute_mi () != "") {
             _text_forecasts.append ("\n    Видимость: " + forecast.visibility_statute_mi () + " м. ");
         };
+
+        if (!forecast.tuple_list_sky_condition ().empty ()) {
+
+            for (auto elem : forecast.tuple_list_sky_condition ()) {
+                _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append ("\t");
+                _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+                _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+            }
+        };
+
         if (forecast.altim_in_hg () != "") {
             _text_forecasts.append ("\n    Нижняя граница облачности:" + forecast.altim_in_hg () + " м. ");
         };
@@ -152,14 +162,6 @@ QString Widget::forming_text_forecast ()
             // НЕ ВЫВОДИТЬ :_text_forecasts.append ("\n Данные не расшифрованы:" + forecast.not_decoded () + " ");
         };
 
-        if (!forecast.tuple_list_sky_condition ().empty ()) {
-
-            for (auto elem : forecast.tuple_list_sky_condition ()) {
-                _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
-                _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-                _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-            }
-        };
         if (!forecast.turbulence_list_condition ().empty ()) {
             for (auto elem : forecast.turbulence_list_condition ()) {
                 _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");

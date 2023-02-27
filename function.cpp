@@ -63,15 +63,15 @@ QString Function::replace_wx_string (QString& _wx_string)
 QString Function::convert_kt_to_ms (QString& _kt_to_ms)
 {
     //
-    return _kt_to_ms = QString::number (static_cast<int> (0.514444 * _kt_to_ms.toDouble ()));
+    return _kt_to_ms = QString::number (static_cast<int> (round (0.5 * _kt_to_ms.toDouble ())));
 }
 QString Function::convert_ft_to_m (QString& _ft_to_m)
 { //
-    return _ft_to_m = QString::number (static_cast<int> (0.3048 * _ft_to_m.toDouble ()));
+    return _ft_to_m = QString::number (static_cast<int> (0.3 * _ft_to_m.toDouble ()));
 }
 QString Function::convert_mi_to_m (QString& _mi_to_m)
 { //
-    return _mi_to_m = QString::number (static_cast<int> (1609.1 * _mi_to_m.toDouble ()));
+    return _mi_to_m = QString::number (static_cast<int> (1000 * round (1.609344 * _mi_to_m.toDouble ())));
 }
 
 void Function::Load_AMOFSG_Dictionary ()

@@ -18,23 +18,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS  Core Widgets Xml Network Core5Compat Gui REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets Xml Network Core5Compat Gui REQUIRED)
 
+set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons_app.rc")
+
 set(PROJECT_SOURCES
     main.cpp
     widget.h widget.cpp
     lb_weather.h lb_weather.cpp
     downloader.h downloader.cpp
     xmlparser.h xmlparser.cpp
+    function.h function.cpp
 
     maintaf.h maintaf.cpp
     forecast_title.h forecast_title.cpp
     forecast_taf.h forecast_taf.cpp
     forecast.h forecast.cpp
     resource.qrc
+    icons_app.rc
     .clang-format
    )
 
 add_executable(${PROJECT_NAME} WIN32
   ${PROJECT_SOURCES}
+    ${APP_ICON_RESOURCE_WINDOWS}
 )
 
 target_link_libraries(${PROJECT_NAME}

@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>resource/AMOFSG_Dictionary.txt</file>
         <file>resource/meteo.ico</file>
-        <file>resource/meteo.png</file>
     </qresource>
     <qresource prefix="/icons_app,rc"/>
 </RCC>

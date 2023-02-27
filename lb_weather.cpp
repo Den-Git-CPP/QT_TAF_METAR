@@ -30,9 +30,9 @@ lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
     vbox->setAlignment (Qt::AlignTop);
     vbox->setContentsMargins (5, 1, 5, 0);
     vbox->addWidget (label_name_airport, 1, Qt::AlignTop);
-    vbox->addStretch (0);
+    vbox->addSpacing (1);
     vbox->addWidget (label_forecast, 1, Qt::AlignTop);
-    vbox->addSpacing (10);
+    vbox->addStretch (5);
     this->setLayout (vbox);
 
     this->move (100, 100);
@@ -51,7 +51,7 @@ void lb_weather::set_text_forecast (QString text_forecast_) { label_forecast->se
 void lb_weather::start_close_timer ()
 {
     timer_close_weather = new QTimer (this);
-    timer_close_weather->setInterval (100000); // интервал 10 сек
+    timer_close_weather->setInterval (540000); // интервал 10 сек
     timer_close_weather->setSingleShot (true);
 
     connect (timer_close_weather, &QTimer::timeout, [=] {
