@@ -12,11 +12,11 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include "downloader.h"
+#include "./include/downloader.h"
 
-#include "lb_weather.h"
-#include "maintaf.h"
-#include "xmlparser.h"
+#include "./include/lb_weather.h"
+#include "./include/maintaf.h"
+#include "./include/xmlparser.h"
 
 class Widget : public QWidget {
     Q_OBJECT

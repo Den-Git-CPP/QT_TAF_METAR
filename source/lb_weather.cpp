@@ -1,4 +1,4 @@
-#include "lb_weather.h"
+#include "./include/lb_weather.h"
 
 lb_weather::lb_weather (QWidget* parent) : QWidget (parent)
 {

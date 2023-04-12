@@ -1,4 +1,4 @@
-#include "maintaf.h"
+#include "./include/maintaf.h"
 
 MainTAF::MainTAF (QObject* parent) : QObject (parent) { Title = new Forecast_Title; }
 

@@ -1,7 +1,7 @@
 #include <QApplication>
 
-#include "lb_weather.h"
-#include "widget.h"
+#include "./include/lb_weather.h"
+#include "./include/widget.h"
 
 int main (int argc, char* argv [])
 {

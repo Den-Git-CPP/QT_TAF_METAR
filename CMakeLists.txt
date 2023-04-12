@@ -20,25 +20,37 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets Xml Network Core5Comp
 
 set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons_app.rc")
 
+set(PROJECT_HEADERS
+    include/widget.h
+    include/lb_weather.h
+    include/downloader.h
+    include/xmlparser.h
+    include/function.h
+    include/maintaf.h
+    include/forecast_title.h
+    include/forecast_taf.h
+    include/forecast.h
+    )
 set(PROJECT_SOURCES
-    main.cpp
-    widget.h widget.cpp
-    lb_weather.h lb_weather.cpp
-    downloader.h downloader.cpp
-    xmlparser.h xmlparser.cpp
-    function.h function.cpp
+    source/main.cpp
+    source/widget.cpp
+    source/lb_weather.cpp
+    source/downloader.cpp
+    source/xmlparser.cpp
+    source/function.cpp
+    source/maintaf.cpp
+    source/forecast_title.cpp
+    source/forecast_taf.cpp
+    source/forecast.cpp
 
-    maintaf.h maintaf.cpp
-    forecast_title.h forecast_title.cpp
-    forecast_taf.h forecast_taf.cpp
-    forecast.h forecast.cpp
     resource.qrc
     icons_app.rc
     .clang-format
    )
 
 add_executable(${PROJECT_NAME} WIN32
-  ${PROJECT_SOURCES}
+    ${PROJECT_HEADERS}
+    ${PROJECT_SOURCES}
     ${APP_ICON_RESOURCE_WINDOWS}
 )
 
