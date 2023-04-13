@@ -10,15 +10,15 @@ class Function {
     ~Function (){};
 
   protected:
-    QString replace_id_staion (QString& _raw_str);
-    QString replace_raw_text (QString& _raw_text);
-    QString replace_time (QString& _time);
-    QString replace_change_indicator (QString& _change_indicator);
-    QString replace_wx_string (QString& _wx_string);
+    QString replace_id_staion (const QString& _raw_str);
+    QString replace_raw_text (const QString& _raw_text);
+    QString replace_time (const QString& _time);
+    QString replace_change_indicator (const QString& _change_indicator);
+    QString replace_wx_string (const QString& _wx_string);
 
-    QString convert_kt_to_ms (QString& _kt_to_ms);
-    QString convert_ft_to_m (QString& _ft_to_m);
-    QString convert_mi_to_m (QString& mi_to_m);
+    QString convert_kt_to_ms (const QString& _kt_to_ms);
+    QString convert_ft_to_m (const QString& _ft_to_m);
+    QString convert_mi_to_m (const QString& mi_to_m);
     QMap<QString, QString> AMOFSG_Dictionary;
     void Load_AMOFSG_Dictionary ();
     QString replace_sky_cover (QString& sky_cover_);

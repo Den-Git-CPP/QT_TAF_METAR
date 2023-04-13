@@ -26,8 +26,8 @@ class Forecast_TAF : private Function {
     void set_issue_time (const QString& issue_time);
     void set_bulletin_time (const QString& bulletin_time);
     void set_valid_time_from (const QString& valid_time_from);
-
     void set_valid_time_to (const QString& valid_time_to);
+
     void set_remarks (const QString& remarks);
     void set_latitude (const QString& latitude);
     void set_longitude (const QString& longitude);
