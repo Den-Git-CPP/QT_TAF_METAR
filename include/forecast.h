@@ -6,8 +6,8 @@
 #pragma once
 class Forecast : private Function {
   public:
-    Forecast ();
-    ~Forecast ();
+    explicit Forecast ();
+    virtual ~Forecast ();
 
     QString fcst_time_from () const;
     QString fcst_time_to () const;

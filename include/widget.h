@@ -15,7 +15,7 @@
 #include "./include/downloader.h"
 
 #include "./include/lb_weather.h"
-#include "./include/maintaf.h"
+#include "./include/taf.h"
 #include "./include/xmlparser.h"
 
 class Widget : public QWidget {
@@ -40,8 +40,8 @@ class Widget : public QWidget {
     QTimer* timer_show_weather = nullptr;
     Downloader* downloader     = nullptr;
     XMLParser* xmlparser       = nullptr;
-    MainTAF* main_TAF          = nullptr;
 
+    std::shared_ptr<TAF> taf = nullptr;
     QString forming_text_forecast ();
     int position_selection{ 1 };
     void Show_weather ();

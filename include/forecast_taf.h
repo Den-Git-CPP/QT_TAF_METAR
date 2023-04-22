@@ -9,7 +9,7 @@ class Forecast_TAF : private Function {
 
   public:
     explicit Forecast_TAF ();
-    ~Forecast_TAF ();
+    virtual ~Forecast_TAF ();
     QString raw_text () const;
     QString station_id () const;
     QString issue_time () const;
@@ -33,8 +33,7 @@ class Forecast_TAF : private Function {
     void set_longitude (const QString& longitude);
     void set_elevation_m (const QString& elevation_m);
 
-    QVector<Forecast> forecasts;
-    void add_forecast (Forecast in_forecast);
+    std::vector<std::shared_ptr<Forecast>> v_forecasts{};
 
   private:
     QString _raw_text{};

@@ -5,7 +5,7 @@
 class Forecast_Title {
   public:
     explicit Forecast_Title ();
-    ~Forecast_Title ();
+    virtual ~Forecast_Title ();
     QString request_index () const;
     QString name () const;
     QString type () const;
