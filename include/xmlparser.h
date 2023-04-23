@@ -13,11 +13,9 @@ class XMLParser : public QObject {
     explicit XMLParser (QObject* parent = nullptr);
     ~XMLParser ();
     void set_dir_file_with_xml (QString const& dir);
-    void read_forecast_taf ();
-    void read_forecast ();
 
   public slots:
-    void Read_XML (std::shared_ptr<TAF> taf_);
+    std::shared_ptr<TAF> Read_XML ();
 
   private:
     QXmlStreamReader reader;
