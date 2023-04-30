@@ -1,4 +1,5 @@
 #include "./include/downloader.h"
+#include "downloader.h"
 
 Downloader::Downloader (QObject* parent) : QObject (parent)
 {
@@ -9,9 +10,9 @@ Downloader::Downloader (QObject* parent) : QObject (parent)
 void Downloader::getData ()
 {
     QUrl url ("http://www.aviationweather.gov/adds/dataserver_current/"
-              "httpparam?dataSource=tafs&requestType=retrieve&format=xml&"
+              "httpparam?dataSource="+_typeforecast+"s&requestType=retrieve&format=xml&"
               "stationString="
-              + _name_airport + "&hoursBeforeNow=1");
+             + _name_airport + "&hoursBeforeNow=1");
     QNetworkRequest request;
     request.setUrl (url);
     manager->get (request);
@@ -34,10 +35,11 @@ void Downloader::onResult (QNetworkReply* reply)
     }
 }
 
-void Downloader::set_name_airport (const QString& name)
-{
-    _name_airport                 = name;
-    _dir_file_with_xml_for_parser = "./file" + name + ".xml";
+
+void Downloader::set_name_airport_typeforecast (QString const& name, QString const& typeforecast) {
+_name_airport = name;
+_typeforecast  = typeforecast;
+_dir_file_with_xml_for_parser = "./file" + _name_airport + "_" + _typeforecast + "".xml";
 }
 
 QString Downloader::get_name_airport () { return _name_airport; }

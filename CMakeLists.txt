@@ -26,10 +26,11 @@ set(PROJECT_HEADERS
     include/downloader.h
     include/xmlparser.h
     include/function.h
-    include/maintaf.h
+    include/taf.h
     include/forecast_title.h
     include/forecast_taf.h
     include/forecast.h
+    include/metar.h
     )
 set(PROJECT_SOURCES
     source/main.cpp
@@ -38,10 +39,11 @@ set(PROJECT_SOURCES
     source/downloader.cpp
     source/xmlparser.cpp
     source/function.cpp
-    source/maintaf.cpp
+    source/taf.cpp
     source/forecast_title.cpp
     source/forecast_taf.cpp
     source/forecast.cpp
+    source/metar.cpp
 
     resource.qrc
     icons_app.rc
@@ -64,18 +66,18 @@ target_link_libraries(${PROJECT_NAME}
     Qt${QT_VERSION_MAJOR}::Gui
  )
 
-SET (MY_RELEASE_DIR ${CMAKE_BINARY_DIR}_Deploy_${PROJECT_NAME})
-#SET (MY_RELEASE_DIR ${CMAKE_CURRENT_LIST_DIR}_MyReleaseDir_EXE)
-message( "Create Directory:" ${MY_RELEASE_DIR})
-file(MAKE_DIRECTORY ${MY_RELEASE_DIR})
-message("CopyFile "  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe  " to "  ${MY_RELEASE_DIR} )
+#SET (MY_RELEASE_DIR ${CMAKE_BINARY_DIR}_Deploy_${PROJECT_NAME})
+##SET (MY_RELEASE_DIR ${CMAKE_CURRENT_LIST_DIR}_MyReleaseDir_EXE)
+#message( "Create Directory:" ${MY_RELEASE_DIR})
+#file(MAKE_DIRECTORY ${MY_RELEASE_DIR})
+#message("CopyFile "  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe  " to "  ${MY_RELEASE_DIR} )
 
-add_custom_command(
-    TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe ${MY_RELEASE_DIR}
-    COMMAND G:\\Qt\\6.2.0\\mingw81_64\\bin\\windeployqt.exe ${MY_RELEASE_DIR}/${PROJECT_NAME}.exe
-    #COMMAND ${MY_RELEASE_DIR}/${PROJECT_NAME}.exe
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  )
+#add_custom_command(
+#    TARGET ${PROJECT_NAME} POST_BUILD
+#    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe ${MY_RELEASE_DIR}
+#    COMMAND G:\\Qt\\6.2.0\\mingw81_64\\bin\\windeployqt.exe ${MY_RELEASE_DIR}/${PROJECT_NAME}.exe
+#    #COMMAND ${MY_RELEASE_DIR}/${PROJECT_NAME}.exe
+#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+#  )
 
 

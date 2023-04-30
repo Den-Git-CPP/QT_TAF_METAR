@@ -16,6 +16,7 @@ public:
   QString get_dir_file_with_xml_for_parser();
 
   void set_name_airport(QString const &name);
+  void set_name_airport_typeforecast(QString const &name,QString const &typeforecast);
 
 signals:
   void onReady();
@@ -27,5 +28,6 @@ public slots:
 private:
   QNetworkAccessManager *manager;
   QString _name_airport{""};
+    QString _typeforecast{""};
   QString _dir_file_with_xml_for_parser{""};
 };

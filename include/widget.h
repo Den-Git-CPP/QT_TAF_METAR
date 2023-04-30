@@ -15,6 +15,7 @@
 #include "./include/downloader.h"
 
 #include "./include/lb_weather.h"
+#include "./include/metar.h"
 #include "./include/taf.h"
 #include "./include/xmlparser.h"
 
@@ -42,6 +43,7 @@ class Widget : public QWidget {
     XMLParser* xmlparser       = nullptr;
 
     std::shared_ptr<TAF> taf = nullptr;
+    std::shared_ptr<METAR> metar = nullptr;
     QString forming_text_forecast ();
     int position_selection{ 1 };
     void Show_weather ();

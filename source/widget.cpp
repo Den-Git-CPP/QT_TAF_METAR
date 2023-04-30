@@ -22,13 +22,16 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     downloader = new Downloader (this); // Инициализируем Downloader
     taf        = std::make_shared<TAF> ();
+    metar        = std::make_shared<METAR> ();
     xmlparser  = new XMLParser (this);
     weather    = new lb_weather (this); // класс запроса погоды
 
     bt_UUWW = new QPushButton (tr ("Запрос Внуково"), this);
     connect (bt_UUWW, &QPushButton::clicked, downloader, [=] () {
-        downloader->set_name_airport ("UUWW");
+        downloader->set_name_airport_typeforecast ("UUWW","taf");
         downloader->getData ();
+        downloader->set_name_airport_typeforecast ("UUWW","metar");
+        downloader->getData ();        
     });
 
     connect (bt_UUWW, &QPushButton::clicked, weather, [=] () {
@@ -37,7 +40,9 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     bt_UUDD = new QPushButton (tr ("Запрос Домодедово"), this);
     connect (bt_UUDD, &QPushButton::clicked, downloader, [=] () {
-        downloader->set_name_airport ("UUDD");
+        downloader->set_name_airport_typeforecast ("UUDD","taf");
+        downloader->getData ();
+        downloader->set_name_airport_typeforecast ("UUDD","metar");
         downloader->getData ();
     });
 
@@ -47,7 +52,9 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     bt_UUEE = new QPushButton (tr ("Запрос Шереметьево"), this);
     connect (bt_UUEE, &QPushButton::clicked, downloader, [=] () {
-        downloader->set_name_airport ("UUEE");
+        downloader->set_name_airport_typeforecast ("UUEE","taf");
+        downloader->getData ();
+        downloader->set_name_airport_typeforecast ("UUEE","metar");
         downloader->getData ();
     });
     connect (bt_UUEE, &QPushButton::clicked, weather, [=] () {
