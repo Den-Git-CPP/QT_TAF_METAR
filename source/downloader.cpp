@@ -33,16 +33,7 @@ void Downloader::onResult (QNetworkReply* reply)
         qDebug () << reply->errorString ();
     }
     else {
-        // _dir_file_with_xml_for_parser = "./" + _name_airport + "_" + reply->property (_typeforecast).toString () + ".xml";
-
-        // QFile* file     = new QFile (_dir_file_with_xml_for_parser);
         buff = reply->readAll ();
-        //        if (file->open (QFile::WriteOnly)) {
-        //            file->write (reply->readAll ());
-        //            file->close ();
-        //            // qDebug () << "Downloading is completed" << _dir_file_with_xml_for_parser;
-        //            emit onReady ();
-        //        }
         emit onReady ();
     }
 }
@@ -50,7 +41,5 @@ void Downloader::onResult (QNetworkReply* reply)
 void Downloader::set_name_airport (QString const& name) { _name_airport = name; }
 
 QString Downloader::get_name_airport () { return _name_airport; }
-
-// QString Downloader::get_dir_file_with_xml_for_parser () { return this->_dir_file_with_xml_for_parser; }
 
 QByteArray Downloader::get_buff () { return this->buff; }

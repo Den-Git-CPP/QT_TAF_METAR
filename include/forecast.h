@@ -7,7 +7,7 @@
 class Forecast : private Function {
   public:
     explicit Forecast ();
-    virtual ~Forecast ();
+    ~Forecast ();
 
     QString fcst_time_from () const;
     QString fcst_time_to () const;

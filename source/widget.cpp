@@ -56,9 +56,10 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     });
 
     connect (downloader, &Downloader::onReady, xmlparser, [=] () {
-        // xmlparser->set_dir_file_with_xml (downloader->get_dir_file_with_xml_for_parser ());
         xmlparser->set_buf_xml (downloader->get_buff ());
-        taf = xmlparser->Read_XML ();
+        xmlparser->get_result_parser ();
+
+        // taf = xmlparser->Read_XML<TAF> ();
         // taf->v_forecasttaf.resize (1); // БЕРЕМ ТОЛЬКО ПЕРВЫЙ ЭЛЕМЕНТ
 
         //  формируется строка прогноза

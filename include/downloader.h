@@ -30,5 +30,4 @@ class Downloader : public QObject {
     QNetworkAccessManager* manager;
     QByteArray buff{};
     QString _name_airport{ "" };
-    //    QString _dir_file_with_xml_for_parser{ "" };
 };

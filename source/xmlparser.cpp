@@ -5,20 +5,12 @@ XMLParser::XMLParser (QObject* parent) : QObject (parent) {}
 
 XMLParser::~XMLParser () {}
 
-void XMLParser::set_dir_file_with_xml (const QString& dir) { this->_dir_file_with_xml = dir; }
-
 void XMLParser::set_buf_xml (QByteArray const& buff) { _buff = buff; }
-
-std::shared_ptr<TAF> XMLParser::Read_XML ()
+template <class T> std::shared_ptr<T> XMLParser::Read_XML ()
 {
-    auto taf = std::make_shared<TAF> ();
-    //   _dir_file_with_xml = "G:\\ProjectQT\\file.xml";
-    //     QFile file (_dir_file_with_xml);
-    //     if (!file.open (QFile::ReadOnly | QFile::Text)) {
-    //         qDebug () << "Cannot read file" << file.errorString ();
-    //         exit (0);
-    //     }
-    //    reader.setDevice (_buff);
+    // auto taf           = std::make_shared<TAF> ();
+    auto forecast_title = std::shared_ptr<Forecast_Title> ();
+
     QXmlStreamReader reader (_buff);
     reader.readNext ();
     while (!reader.atEnd () && !reader.hasError ()) {
@@ -31,14 +23,22 @@ std::shared_ptr<TAF> XMLParser::Read_XML ()
                 continue;
             }
             else if (reader.name ().toString () == "request_index") {
-                taf->ForecastTitle->set_request_index (reader.readElementText ());
+                forecast_title->set_request_index (reader.readElementText ());
             }
             else if (reader.name ().toString () == "data_source") {
-                taf->ForecastTitle->set_name (reader.attributes ().value ("name").toString ());
+                forecast_title->set_name (reader.attributes ().value ("name").toString ());
+                /* создаем std::shared_ptr по типу data_source*/
+
+                if (reader.attributes ().value ("name").toString () == "tafs") {
+                    auto main_forecast = std::shared_ptr<TAF> ();
+                }
+                else if (reader.attributes ().value ("name").toString () == "metars") {
+                    auto main_forecast = std::shared_ptr<METAR> ();
+                }
                 reader.skipCurrentElement ();
             }
             else if (reader.name ().toString () == "request") {
-                taf->ForecastTitle->set_type (reader.attributes ().value ("type").toString ());
+                forecast_title->set_type (reader.attributes ().value ("type").toString ());
                 reader.skipCurrentElement ();
             }
             else if (reader.name ().toString () == "errors") {
@@ -48,7 +48,7 @@ std::shared_ptr<TAF> XMLParser::Read_XML ()
                         errors_list.append (reader.readElementText ());
                     }
                 }
-                taf->ForecastTitle->set_erorrs (errors_list);
+                forecast_title->set_erorrs (errors_list);
             }
             else if (reader.name ().toString () == "warnings") {
                 QStringList warnings_list;
@@ -57,16 +57,18 @@ std::shared_ptr<TAF> XMLParser::Read_XML ()
                         warnings_list.append (reader.readElementText ());
                     }
                 }
-                taf->ForecastTitle->set_warnings (warnings_list);
+                forecast_title->set_warnings (warnings_list);
             }
             else if (reader.name ().toString () == "time_taken_ms") {
-                taf->ForecastTitle->set_time_taken_ms (reader.readElementText ());
+                forecast_title->set_time_taken_ms (reader.readElementText ());
             }
             else if (reader.name ().toString () == "data") {
-                taf->ForecastTitle->set_num_results (reader.attributes ().value ("num_results").toString ());
-            }
+                forecast_title->set_num_results (reader.attributes ().value ("num_results").toString ());
+
+            } /*end forecast_title*/
             else if (reader.name ().toString () == "TAF") {
-                auto forecast_taf = std::make_shared<Forecast_TAF> ();
+
+                auto forecast_taf = std::shared_ptr<Forecast_TAF> ();
                 while (reader.readNextStartElement ()) {
                     if (reader.name ().toString () == "raw_text") {
                         forecast_taf->set_raw_text (reader.readElementText ());
@@ -100,7 +102,7 @@ std::shared_ptr<TAF> XMLParser::Read_XML ()
                     }
                     else if (reader.name ().toString () == "forecast") {
                         //   read_forecast
-                        auto forecast = std::make_shared<Forecast> ();
+                        auto forecast = std::shared_ptr<Forecast> ();
                         while (reader.readNextStartElement ()) {
                             if (reader.name ().toString () == "fcst_time_from") {
                                 forecast->set_fcst_time_from (reader.readElementText ());
@@ -191,7 +193,7 @@ std::shared_ptr<TAF> XMLParser::Read_XML ()
                 } // end while Forecast_TAF
                 if (QXmlStreamReader::EndElement && reader.name ().toString () == "TAF") {
 
-                    taf->v_forecasttaf.emplace_back (std::move (forecast_taf));
+                    // main_forecast->v_forecasttaf.emplace_back (std::move (forecast_taf));
                 }
             } // while end TAF
         }
@@ -201,5 +203,5 @@ std::shared_ptr<TAF> XMLParser::Read_XML ()
         exit (0);
     }
 
-    return taf;
+    return std::move (std::make_shared<TAF> ());
 }
