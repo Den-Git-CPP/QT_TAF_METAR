@@ -1,5 +1,4 @@
 #include "./include/downloader.h"
-#include "downloader.h"
 
 Downloader::Downloader (QObject* parent) : QObject (parent)
 {
@@ -10,12 +9,22 @@ Downloader::Downloader (QObject* parent) : QObject (parent)
 void Downloader::getData ()
 {
     QUrl url ("http://www.aviationweather.gov/adds/dataserver_current/"
-              "httpparam?dataSource="+_typeforecast+"s&requestType=retrieve&format=xml&"
-              "stationString="
-             + _name_airport + "&hoursBeforeNow=1");
-    QNetworkRequest request;
-    request.setUrl (url);
-    manager->get (request);
+              "httpparam?dataSource=tafs&requestType=retrieve&format=xml&stationString="
+              + _name_airport + "&hoursBeforeNow=1");
+
+    QNetworkRequest request;             // Отправляемый запрос
+    request.setUrl (url);                // Устанавлвиваем URL в запрос
+    auto reply = manager->get (request); // Выполняем запрос
+    reply->setProperty (_typeforecast, "Taf");
+
+    url = "http://www.aviationweather.gov/adds/dataserver_current/"
+          "httpparam?dataSource=metars&requestType=retrieve&format=xml&"
+          "stationString="
+        + _name_airport + "&hoursBeforeNow=1";
+
+    request.setUrl (url);                 // Устанавлвиваем URL в запрос
+    auto reply2 = manager->get (request); // Выполняем запрос
+    reply2->setProperty (_typeforecast, "Metar");
 }
 
 void Downloader::onResult (QNetworkReply* reply)
@@ -25,22 +34,19 @@ void Downloader::onResult (QNetworkReply* reply)
         qDebug () << reply->errorString ();
     }
     else {
+        _dir_file_with_xml_for_parser = "./" + _name_airport + "_" + reply->property (_typeforecast).toString () + ".xml";
+
         QFile* file = new QFile (_dir_file_with_xml_for_parser);
         if (file->open (QFile::WriteOnly)) {
             file->write (reply->readAll ());
             file->close ();
-            //   qDebug () << "Downloading is completed";
+            // qDebug () << "Downloading is completed" << _dir_file_with_xml_for_parser;
             emit onReady ();
         }
     }
 }
 
-
-void Downloader::set_name_airport_typeforecast (QString const& name, QString const& typeforecast) {
-_name_airport = name;
-_typeforecast  = typeforecast;
-_dir_file_with_xml_for_parser = "./file" + _name_airport + "_" + _typeforecast + "".xml";
-}
+void Downloader::set_name_airport (QString const& name) { _name_airport = name; }
 
 QString Downloader::get_name_airport () { return _name_airport; }
 
