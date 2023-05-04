@@ -22,16 +22,14 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     downloader = new Downloader (this); // Инициализируем Downloader
     taf        = std::make_shared<TAF> ();
-    metar        = std::make_shared<METAR> ();
+    metar      = std::make_shared<METAR> ();
     xmlparser  = new XMLParser (this);
     weather    = new lb_weather (this); // класс запроса погоды
 
     bt_UUWW = new QPushButton (tr ("Запрос Внуково"), this);
     connect (bt_UUWW, &QPushButton::clicked, downloader, [=] () {
-        downloader->set_name_airport_typeforecast ("UUWW","taf");
+        downloader->set_name_airport ("UUWW");
         downloader->getData ();
-        downloader->set_name_airport_typeforecast ("UUWW","metar");
-        downloader->getData ();        
     });
 
     connect (bt_UUWW, &QPushButton::clicked, weather, [=] () {
@@ -40,9 +38,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     bt_UUDD = new QPushButton (tr ("Запрос Домодедово"), this);
     connect (bt_UUDD, &QPushButton::clicked, downloader, [=] () {
-        downloader->set_name_airport_typeforecast ("UUDD","taf");
-        downloader->getData ();
-        downloader->set_name_airport_typeforecast ("UUDD","metar");
+        downloader->set_name_airport ("UUDD");
         downloader->getData ();
     });
 
@@ -52,9 +48,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
     bt_UUEE = new QPushButton (tr ("Запрос Шереметьево"), this);
     connect (bt_UUEE, &QPushButton::clicked, downloader, [=] () {
-        downloader->set_name_airport_typeforecast ("UUEE","taf");
-        downloader->getData ();
-        downloader->set_name_airport_typeforecast ("UUEE","metar");
+        downloader->set_name_airport ("UUEE");
         downloader->getData ();
     });
     connect (bt_UUEE, &QPushButton::clicked, weather, [=] () {
@@ -62,16 +56,17 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     });
 
     connect (downloader, &Downloader::onReady, xmlparser, [=] () {
-        xmlparser->set_dir_file_with_xml (downloader->get_dir_file_with_xml_for_parser ());
+        // xmlparser->set_dir_file_with_xml (downloader->get_dir_file_with_xml_for_parser ());
+        xmlparser->set_buf_xml (downloader->get_buff ());
         taf = xmlparser->Read_XML ();
-        taf->v_forecasttaf.resize (1); // БЕРЕМ ТОЛЬКО ПЕРВЫЙ ЭЛЕМЕНТ
-        //  qDebug () << taf->ForecastTitle->request_index () << "\t";
+        // taf->v_forecasttaf.resize (1); // БЕРЕМ ТОЛЬКО ПЕРВЫЙ ЭЛЕМЕНТ
+
         //  формируется строка прогноза
-        weather->set_name_airport (taf->v_forecasttaf.at (0)->station_id ());
-        weather->set_text_forecast (forming_text_forecast ());
+        // weather->set_name_airport (taf->v_forecasttaf.at (0)->station_id ());
+        // weather->set_text_forecast (forming_text_forecast ());
         //  показываем Label
-        weather->show ();
-        // qDebug () << "Show weather" << QTime::currentTime ().toString (); /*  */
+        // weather->show ();
+        // qDebug () << "Show weather" << QTime::currentTime ().toString ();
     });
 
     vbox = new QVBoxLayout (this);

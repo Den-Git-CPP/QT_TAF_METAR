@@ -15,7 +15,8 @@ class Downloader : public QObject {
   public:
     explicit Downloader (QObject* parent = nullptr);
     QString get_name_airport ();
-    QString get_dir_file_with_xml_for_parser ();
+    // QString get_dir_file_with_xml_for_parser ();
+    QByteArray get_buff ();
     void set_name_airport (QString const& name);
 
   signals:
@@ -27,7 +28,7 @@ class Downloader : public QObject {
 
   private:
     QNetworkAccessManager* manager;
-
+    QByteArray buff{};
     QString _name_airport{ "" };
-    QString _dir_file_with_xml_for_parser{ "" };
+    //    QString _dir_file_with_xml_for_parser{ "" };
 };

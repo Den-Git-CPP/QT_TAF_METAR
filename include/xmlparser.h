@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "./include/metar.h"
 #include "./include/taf.h"
 #include <memory>
 #include <QDebug>
@@ -13,11 +14,13 @@ class XMLParser : public QObject {
     explicit XMLParser (QObject* parent = nullptr);
     ~XMLParser ();
     void set_dir_file_with_xml (QString const& dir);
+    void set_buf_xml (QByteArray const& buff);
 
   public slots:
     std::shared_ptr<TAF> Read_XML ();
 
   private:
-    QXmlStreamReader reader;
+    QByteArray _buff{};
+    //   QXmlStreamReader reader;
     QString _dir_file_with_xml{ "" };
 };

@@ -7,16 +7,19 @@ XMLParser::~XMLParser () {}
 
 void XMLParser::set_dir_file_with_xml (const QString& dir) { this->_dir_file_with_xml = dir; }
 
+void XMLParser::set_buf_xml (QByteArray const& buff) { _buff = buff; }
+
 std::shared_ptr<TAF> XMLParser::Read_XML ()
 {
     auto taf = std::make_shared<TAF> ();
-    //  _dir_file_with_xml = "G:\\ProjectQT\\file.xml";
-    QFile file (_dir_file_with_xml);
-    if (!file.open (QFile::ReadOnly | QFile::Text)) {
-        qDebug () << "Cannot read file" << file.errorString ();
-        exit (0);
-    }
-    reader.setDevice (&file);
+    //   _dir_file_with_xml = "G:\\ProjectQT\\file.xml";
+    //     QFile file (_dir_file_with_xml);
+    //     if (!file.open (QFile::ReadOnly | QFile::Text)) {
+    //         qDebug () << "Cannot read file" << file.errorString ();
+    //         exit (0);
+    //     }
+    //    reader.setDevice (_buff);
+    QXmlStreamReader reader (_buff);
     reader.readNext ();
     while (!reader.atEnd () && !reader.hasError ()) {
         QXmlStreamReader::TokenType token = reader.readNext ();
