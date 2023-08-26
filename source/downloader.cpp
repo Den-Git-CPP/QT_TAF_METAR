@@ -1,45 +1,58 @@
 #include "./include/downloader.h"
+Downloader::Downloader (QObject* parent) : QObject (parent) {}
 
-Downloader::Downloader (QObject* parent) : QObject (parent)
+void Downloader::getDataForecast ()
 {
-    manager = new QNetworkAccessManager ();
-    connect (manager, &QNetworkAccessManager::finished, this, &Downloader::onResult);
+    QMultiMapIterator<QString, QString> i (map_weather_forecast_sign);
+    while (i.hasNext ()) {
+        i.next ();
+        weather_forecast_sign_ = i.key ();
+        airport_IKAO_name_     = i.value ();
+        QUrl url               = "http://www.aviationweather.gov/adds/dataserver_current/"
+                                 "httpparam?dataSource="
+                 + weather_forecast_sign_
+                 + "&requestType=retrieve&format=xml&stationString="
+                   ""
+                 + airport_IKAO_name_ + "&hoursBeforeNow=1";
+        getData (url);
+    }
+
+    // Загрузка завершена
+    emit onReady ();
 }
 
-void Downloader::getData ()
+void Downloader::set_name_airport (const QString& newAirport_IKAO_name)
 {
-    QUrl url ("http://www.aviationweather.gov/adds/dataserver_current/"
-              "httpparam?dataSource=tafs&requestType=retrieve&format=xml&stationString="
-              + _name_airport + "&hoursBeforeNow=1");
-
-    QNetworkRequest request;             // Отправляемый запрос
-    request.setUrl (url);                // Устанавлвиваем URL в запрос
-    auto reply = manager->get (request); // Выполняем запрос
-    reply->setProperty (_typeforecast, "Taf");
-
-    url = "http://www.aviationweather.gov/adds/dataserver_current/"
-          "httpparam?dataSource=metars&requestType=retrieve&format=xml&stationString="
-        + _name_airport + "&hoursBeforeNow=1";
-
-    request.setUrl (url);
-    auto reply2 = manager->get (request);
-    reply2->setProperty (_typeforecast, "Metar");
+    map_weather_forecast_sign.insert ("tafs", newAirport_IKAO_name);
+    map_weather_forecast_sign.insert ("metars", newAirport_IKAO_name);
 }
 
-void Downloader::onResult (QNetworkReply* reply)
+std::vector<std::tuple<QString, QByteArray>> Downloader::get_vec_buf_xml () { return this->v_storage_gorecast; }
+
+void Downloader::getData (QUrl in_url)
 {
-    if (reply->error ()) {
+    // Построить запрос
+    QNetworkRequest request;
+    request.setUrl (in_url);
+
+    QNetworkAccessManager* manager = new QNetworkAccessManager (this);
+    // послать запрос
+    QNetworkReply* pReplay = manager->get (request);
+
+    // Запускаем локальный цикл обработки событий, ожидаем окончания ответа и
+    QEventLoop eventLoop;
+    QObject::connect (manager, &QNetworkAccessManager::finished, &eventLoop, &QEventLoop::quit);
+    eventLoop.exec ();
+    // Получить информацию об ответе
+    if (pReplay->error ()) {
+        // Показываем информацию об ошибках
         qDebug () << "ERROR";
-        qDebug () << reply->errorString ();
+        qDebug () << pReplay->errorString ();
     }
     else {
-        buff = reply->readAll ();
-        emit onReady ();
+        QByteArray buff = pReplay->readAll ();
+        // auto f = std::make_tuple(weather_forecast_sign_, std::move(buff));
+        v_storage_gorecast.emplace_back (std::move (std::make_tuple (weather_forecast_sign_, std::move (buff))));
+        pReplay->deleteLater ();
     }
 }
-
-void Downloader::set_name_airport (QString const& name) { _name_airport = name; }
-
-QString Downloader::get_name_airport () { return _name_airport; }
-
-QByteArray Downloader::get_buff () { return this->buff; }

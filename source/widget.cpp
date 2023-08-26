@@ -29,7 +29,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     bt_UUWW = new QPushButton (tr ("Запрос Внуково"), this);
     connect (bt_UUWW, &QPushButton::clicked, downloader, [=] () {
         downloader->set_name_airport ("UUWW");
-        downloader->getData ();
+        downloader->getDataForecast ();
     });
 
     connect (bt_UUWW, &QPushButton::clicked, weather, [=] () {
@@ -39,7 +39,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     bt_UUDD = new QPushButton (tr ("Запрос Домодедово"), this);
     connect (bt_UUDD, &QPushButton::clicked, downloader, [=] () {
         downloader->set_name_airport ("UUDD");
-        downloader->getData ();
+        downloader->getDataForecast ();
     });
 
     connect (bt_UUDD, &QPushButton::clicked, weather, [=] () {
@@ -49,17 +49,17 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     bt_UUEE = new QPushButton (tr ("Запрос Шереметьево"), this);
     connect (bt_UUEE, &QPushButton::clicked, downloader, [=] () {
         downloader->set_name_airport ("UUEE");
-        downloader->getData ();
+        downloader->getDataForecast ();
     });
     connect (bt_UUEE, &QPushButton::clicked, weather, [=] () {
         weather->start_close_timer ();
     });
 
     connect (downloader, &Downloader::onReady, xmlparser, [=] () {
-        xmlparser->set_buf_xml (downloader->get_buff ());
-        xmlparser->get_result_parser ();
+        xmlparser->set_vec_buf_xml (downloader->get_vec_buf_xml ());
+        // xmlparser->set_vec_buf_xml (downloader)->get_vec_buf_xml ();
+        //  xmlparser->create_shr_ptr_forecast ();
 
-        // taf = xmlparser->Read_XML<TAF> ();
         // taf->v_forecasttaf.resize (1); // БЕРЕМ ТОЛЬКО ПЕРВЫЙ ЭЛЕМЕНТ
 
         //  формируется строка прогноза

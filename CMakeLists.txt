@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project("")
+project("1")
 get_filename_component(PROJECT_NAME ${CMAKE_CURRENT_SOURCE_DIR} NAME)
 message("CMAKE_CURRENT_SOURCE_DIR =>PROJECT_NAME=> " ${PROJECT_NAME})
 

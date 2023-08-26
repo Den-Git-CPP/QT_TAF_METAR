@@ -13,15 +13,13 @@ class XMLParser : public QObject {
   public:
     explicit XMLParser (QObject* parent = nullptr);
     ~XMLParser ();
-    void set_buf_xml (QByteArray const& buff);
-    void get_buf_xml (QByteArray const& buff);
+    void set_vec_buf_xml (const std::vector<std::tuple<QString, QByteArray>>& in_vec_tuple_data_for_parsing);
+    void create_shr_ptr_forecast ();
     template <class T> std::shared_ptr<T> Read_XML ();
 
-  public slots:
-
-    QVariant get_result_parser ();
-
   private:
+    std::vector<std::tuple<QString, QByteArray>> vec_tuple_data_for_parsing;
     QByteArray _buff{};
-    QString _dir_file_with_xml{ "" };
+    std::shared_ptr<TAF> xml_taf ;
+    std::shared_ptr<METAR> xml_metar;
 };

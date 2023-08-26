@@ -42,7 +42,7 @@ class Widget : public QWidget {
     Downloader* downloader     = nullptr;
     XMLParser* xmlparser       = nullptr;
 
-    std::shared_ptr<TAF> taf = nullptr;
+    std::shared_ptr<TAF> taf     = nullptr;
     std::shared_ptr<METAR> metar = nullptr;
     QString forming_text_forecast ();
     int position_selection{ 1 };
