@@ -3,23 +3,21 @@
 #include "./include/metar.h"
 #include "./include/taf.h"
 #include <memory>
-#include <QDebug>
-#include <QFile>
 #include <QObject>
 #include <QXmlStreamReader>
+#include <tuple>
+#include <type_traits>
 
 class XMLParser : public QObject {
     Q_OBJECT
   public:
     explicit XMLParser (QObject* parent = nullptr);
     ~XMLParser ();
-    void set_vec_buf_xml (const std::vector<std::tuple<QString, QByteArray>>& in_vec_tuple_data_for_parsing);
-    void create_shr_ptr_forecast ();
-    template <class T> std::shared_ptr<T> Read_XML ();
+    void set_vec_buf_xml (const std::vector<std::tuple<QString, QString>>& in_vec_tuple_data_for_parsing);
+    void fill_u_ptr_Forecast ();
+    std::unique_ptr<TAF> taf     = nullptr;
+    std::unique_ptr<METAR> metar = nullptr;
 
   private:
-    std::vector<std::tuple<QString, QByteArray>> vec_tuple_data_for_parsing;
-    QByteArray _buff{};
-    std::shared_ptr<TAF> xml_taf ;
-    std::shared_ptr<METAR> xml_metar;
+    std::vector<std::tuple<QString, QString>> vec_tuple_data_for_parsing;
 };

@@ -39,11 +39,10 @@ class Widget : public QWidget {
 
     lb_weather* weather        = nullptr;
     QTimer* timer_show_weather = nullptr;
-    Downloader* downloader     = nullptr;
-    XMLParser* xmlparser       = nullptr;
 
-    std::shared_ptr<TAF> taf     = nullptr;
-    std::shared_ptr<METAR> metar = nullptr;
+    Downloader* downloader = nullptr;
+    XMLParser* xmlparser   = nullptr;
+
     QString forming_text_forecast ();
     int position_selection{ 1 };
     void Show_weather ();

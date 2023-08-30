@@ -27,7 +27,7 @@ void Downloader::set_name_airport (const QString& newAirport_IKAO_name)
     map_weather_forecast_sign.insert ("metars", newAirport_IKAO_name);
 }
 
-std::vector<std::tuple<QString, QByteArray>> Downloader::get_vec_buf_xml () { return this->v_storage_gorecast; }
+std::vector<std::tuple<QString, QString>> Downloader::get_vec_buf_xml () { return this->v_storage_gorecast; }
 
 void Downloader::getData (QUrl in_url)
 {
@@ -50,9 +50,15 @@ void Downloader::getData (QUrl in_url)
         qDebug () << pReplay->errorString ();
     }
     else {
-        QByteArray buff = pReplay->readAll ();
-        // auto f = std::make_tuple(weather_forecast_sign_, std::move(buff));
+        QString buff = QString (pReplay->readAll ());
         v_storage_gorecast.emplace_back (std::move (std::make_tuple (weather_forecast_sign_, std::move (buff))));
-        pReplay->deleteLater ();
+        /* SaveTo File
+               QFile* file = new QFile ("G:\\file_" + QDateTime::currentDateTime ().toString ("yyyy_MM_dd_hhmmss") + ".xml");
+               if (file->open (QFile::WriteOnly)) {
+                   file->write (pReplay->readAll ());
+                   file->close ();
+                  }
+        */
     }
+    pReplay->deleteLater ();
 }
