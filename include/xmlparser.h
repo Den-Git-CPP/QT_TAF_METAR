@@ -3,6 +3,7 @@
 #include "./include/metar.h"
 #include "./include/taf.h"
 #include <memory>
+#include <QDebug>
 #include <QObject>
 #include <QXmlStreamReader>
 #include <tuple>

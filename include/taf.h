@@ -7,8 +7,8 @@
 class TAF {
   public:
     explicit TAF ();
-    virtual ~TAF ();
+    ~TAF ();
 
-    std::shared_ptr<Forecast_Title> ForecastTitle = nullptr;
-    std::vector<std::shared_ptr<Forecast_TAF>> v_forecasttaf{};
+    std::unique_ptr<Forecast_Title> ForecastTitle = nullptr;
+    std::unique_ptr<Forecast_TAF> ForecastTAF     = nullptr;
 };

@@ -33,7 +33,7 @@ class Forecast_TAF : private Function {
     void set_longitude (const QString& longitude);
     void set_elevation_m (const QString& elevation_m);
 
-    std::vector<std::shared_ptr<Forecast>> v_forecasts{};
+    std::vector<std::unique_ptr<Forecast>> v_forecasts{};
 
   private:
     QString _raw_text{};
