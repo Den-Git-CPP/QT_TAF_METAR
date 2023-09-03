@@ -1,24 +1,50 @@
 #pragma once
 #include "./include/forecast_title.h"
+#include "./include/function.h"
+
 #include <memory>
-class METAR {
+class METAR : private Function {
   public:
     explicit METAR ();
     virtual ~METAR ();
 
+    QString raw_text () const;
+    void set_raw_text (const QString& raw_text);
+
+    const QString& station_id () const;
+    void setStation_id (const QString& newStation_id);
+
+    const QString& observation_time () const;
+    void setObservation_time (const QString& newObservation_time);
+
+    const QString& latitude () const;
+    void setLatitude (const QString& newLatitude);
+
+    const QString& longitude () const;
+    void setLongitude (const QString& newLongitude);
+
+    const QString& visibility_statute_mi () const;
+    void setVisibility_statute_mi (const QString& newVisibility_statute_mi);
+
+    const QString& altim_in_hg () const;
+    void setAltim_in_hg (const QString& newAltim_in_hg);
+
+    const QString& flight_category () const;
+    void setFlight_category (const QString& newFlight_category);
+
   private:
-    QString raw_text_{};
-    QString station_id_{};
-    QString observation_time_{};
-    QString latitude_{};
-    QString longitude_{};
-    QString temp_c_{};
-    QString dwepoint_c_{};
-    QString visibility_statute_mi_{};
-    QString altim_in_hg_{};
+    QString raw_text_{};              //
+    QString station_id_{};            //
+    QString observation_time_{};      //
+    QString latitude_{};              //
+    QString longitude_{};             //
+    QString temp_c_{};                //
+    QString dwepoint_c_{};            //
+    QString visibility_statute_mi_{}; //
+    QString altim_in_hg_{};           //
     QString sea_level_pressure_mb_{};
     QString wx_string_{};
-    QString flight_category_{};
+    QString flight_category_{}; //
     QString three_hr_pressure_tendency_mb_{};
     QString maxT_c_{};
     QString minT_c_{};
@@ -30,8 +56,8 @@ class METAR {
     QString pcp24hr_in_{};
     QString snow_in_{};
     QString vert_vis_ft_{};
-    QString metar_type_{};
-    QString elevation_m_{};
+    QString metar_type_{};  //
+    QString elevation_m_{}; //
 
     std::shared_ptr<Forecast_Title> ForecastTitle = nullptr;
     // std::shared_ptr<Wind> wind = nullptr;

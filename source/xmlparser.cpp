@@ -15,7 +15,7 @@ void XMLParser::fill_u_ptr_Forecast ()
     for (auto& [sign_buff, buff] : vec_tuple_data_for_parsing) {
         if (sign_buff == "tafs") {
             // Берем первый прогноз
-            int startPos = buff.indexOf ("</TAF>") + 8;
+            int startPos = buff.indexOf ("</TAF>") + 9;
             int endPos   = buff.indexOf ("</data>");
             int length   = (endPos - startPos);
             buff.remove (startPos, length);
@@ -29,16 +29,6 @@ void XMLParser::fill_u_ptr_Forecast ()
             taf = std::make_unique<TAF> ();
             QXmlStreamReader reader (buff);
             reader.readNext ();
-            while (!reader.atEnd () && !reader.hasError ()) {
-                QXmlStreamReader::TokenType token = reader.readNext ();
-                if (token == QXmlStreamReader::StartElement) {
-                    continue;
-                }
-                else if (token == QXmlStreamReader::EndElement) {
-                    continue;
-                }
-            }
-
             while (!reader.atEnd () && !reader.hasError ()) {
                 QXmlStreamReader::TokenType token = reader.readNext ();
                 if (token == QXmlStreamReader::StartDocument) {
@@ -195,12 +185,111 @@ void XMLParser::fill_u_ptr_Forecast ()
             }
         } // if end tafs
         if (sign_buff == "metars") {
-            QFile* file = new QFile ("G:\\file_" + QDateTime::currentDateTime ().toString ("yyyy_MM_dd_hhmmss") + ".xml");
-            if (file->open (QFile::WriteOnly)) {
-                file->write (buff.toUtf8 ());
-                file->close ();
-            }
+            int startPos = buff.indexOf ("</METAR>") + 9;
+            int endPos   = buff.indexOf ("</data>");
+            int length   = (endPos - startPos);
+            buff.remove (startPos, length);
+            metar = std::make_unique<METAR> ();
+            /*
+              QFile* file = new QFile ("G:\\file_" + QDateTime::currentDateTime ().toString ("yyyy_MM_dd_hhmmss") + ".xml");
+              if (file->open (QFile::WriteOnly)) {
+                  file->write (buff.toUtf8 ());
+                  file->close ();
+              }
 
-        } // if end metars
-    }     // end for
+              */
+            QXmlStreamReader reader_metar (buff);
+            reader_metar.readNext ();
+
+            while (!reader_metar.atEnd () && !reader_metar.hasError ()) {
+                QXmlStreamReader::TokenType token = reader_metar.readNext ();
+                if (token == QXmlStreamReader::StartDocument) {
+                    continue;
+                }
+                if (token == QXmlStreamReader::StartElement) {
+                    continue;
+                }
+
+                if (reader_metar.name ().toString () == "response") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "request_index") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "data_source") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "request") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "errors") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "warnings") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "time_taken_ms") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "data") {
+                    continue;
+                }
+                else if (reader_metar.name ().toString () == "METAR") {
+                    continue;
+                } // end METAR
+                else if (reader_metar.name ().toString () == "raw_text") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "station_id") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "observation_time") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "latitude") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "longitude") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "temp_c") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "dewpoint_c") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "wind_dir_degrees") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "wind_speed_kt") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "visibility_statute_mi") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "altim_in_hg") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "quality_control_flags") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "sky_condition sky_cover") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "flight_category ") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "metar_type ") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+                else if (reader_metar.name ().toString () == "elevation_m ") {
+                    qDebug () << reader_metar.name ().toString () << "\n";
+                }
+
+                if (QXmlStreamReader::EndElement && reader_metar.name ().toString () == "METAR") {
+                    qDebug () << "END element" << reader_metar.name ().toString () << "\n";
+                }
+            } // end while
+        }     // if end metars
+    }         // end for
 }
