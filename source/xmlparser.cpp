@@ -12,6 +12,9 @@ void XMLParser::set_vec_buf_xml (const std::vector<std::tuple<QString, QString> 
 
 void XMLParser::fill_u_ptr_Forecast ()
 {
+    taf           = std::make_unique<TAF> ();
+    metar         = std::make_unique<METAR> ();
+    auto forecast = std::make_unique<Forecast> ();
     for (auto& [sign_buff, buff] : vec_tuple_data_for_parsing) {
         if (sign_buff == "tafs") {
             // Берем первый прогноз
@@ -19,277 +22,234 @@ void XMLParser::fill_u_ptr_Forecast ()
             int endPos   = buff.indexOf ("</data>");
             int length   = (endPos - startPos);
             buff.remove (startPos, length);
-            /*// Save to file
-            QFile* file = new QFile ("G:\\file_" + QDateTime::currentDateTime ().toString ("yyyy_MM_dd_hhmmss") + ".xml");
-            if (file->open (QFile::WriteOnly)) {
-                file->write (buff.toUtf8 ());
-                file->close ();
-            }*/
-
-            taf = std::make_unique<TAF> ();
-            QXmlStreamReader reader (buff);
-            reader.readNext ();
-            while (!reader.atEnd () && !reader.hasError ()) {
-                QXmlStreamReader::TokenType token = reader.readNext ();
-                if (token == QXmlStreamReader::StartDocument) {
-                    continue;
-                }
-                if (token == QXmlStreamReader::StartElement) {
-                    if (reader.name ().toString () == "response") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "request_index") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "data_source") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "request") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "errors") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "warnings") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "time_taken_ms") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "data") {
-                        continue;
-                    }
-                    else if (reader.name ().toString () == "TAF") {
-                        // read TAF
-                        while (reader.readNextStartElement ()) {
-                            if (reader.name ().toString () == "raw_text") {
-                                taf->ForecastTAF->set_raw_text (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "station_id") {
-                                taf->ForecastTAF->set_station_id (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "issue_time") {
-                                taf->ForecastTAF->set_issue_time (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "bulletin_time") {
-                                taf->ForecastTAF->set_bulletin_time (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "valid_time_from") {
-                                taf->ForecastTAF->set_valid_time_from (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "valid_time_to") {
-                                taf->ForecastTAF->set_valid_time_to (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "remarks") {
-                                taf->ForecastTAF->set_remarks (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "latitude") {
-                                taf->ForecastTAF->set_latitude (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "longitude") {
-                                taf->ForecastTAF->set_longitude (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "elevation_m") {
-                                taf->ForecastTAF->set_elevation_m (reader.readElementText ());
-                            }
-                            else if (reader.name ().toString () == "forecast") {
-                                //   read_forecast
-                                auto forecast = std::make_unique<Forecast> ();
-                                while (reader.readNextStartElement ()) {
-                                    if (reader.name ().toString () == "fcst_time_from") {
-                                        forecast->set_fcst_time_from (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "fcst_time_to") {
-                                        forecast->set_fcst_time_to (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "change_indicator") {
-                                        forecast->set_change_indicator (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "time_becoming") {
-                                        forecast->set_time_becoming (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "probability") {
-                                        forecast->set_probability (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wind_dir_degrees") {
-                                        forecast->set_wind_dir_degrees (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wind_speed_kt") {
-                                        forecast->set_wind_speed_kt (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wind_gust_kt") {
-                                        forecast->set_wind_gust_kt (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wind_shear_hgt_ft_agl") {
-                                        forecast->set_wind_shear_hgt_ft_agl (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wind_shear_dir_degrees") {
-                                        forecast->set_wind_shear_dir_degrees (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wind_shear_speed_kt") {
-                                        forecast->set_wind_shear_dir_degrees (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "visibility_statute_mi") {
-                                        forecast->set_visibility_statute_mi (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "altim_in_hg") {
-                                        forecast->set_altim_in_hg (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "vert_vis_ft") {
-                                        forecast->set_vert_vis_ft (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "wx_string") {
-                                        forecast->set_wx_string (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "not_decoded") {
-                                        forecast->set_not_decoded (reader.readElementText ());
-                                    }
-                                    else if (reader.name ().toString () == "sky_condition") {
-                                        forecast->set_condition ("sky_condition", std::make_tuple (reader.attributes ().value ("sky_cover").toString (),
-                                                                                    reader.attributes ().value ("cloud_base_ft_agl").toString (),
-                                                                                    reader.attributes ().value ("cloud_type").toString ()));
-                                    }
-                                    else if (reader.name ().toString () == "turbulence_condition") {
-                                        forecast->set_condition (
-                                          "turbulence_condition", std::make_tuple (reader.attributes ().value ("turbulence_intensity").toString (),
-                                                                    reader.attributes ().value ("turbulence_min_alt_ft_agl").toString (),
-                                                                    reader.attributes ().value ("turbulence_max_alt_ft_agl").toString ()));
-                                    }
-                                    else if (reader.name ().toString () == "icing_condition") {
-                                        forecast->set_condition ("icing_condition", std::make_tuple (reader.attributes ().value ("icing_intensity").toString (),
-                                                                                      reader.attributes ().value ("icing_min_alt_ft_agl").toString (),
-                                                                                      reader.attributes ().value ("icing_max_alt_ft_agl").toString ()));
-                                    }
-                                    else {
-                                        reader.skipCurrentElement ();
-                                    }
-                                    reader.readNext ();
-                                }
-                                if (QXmlStreamReader::EndElement && reader.name ().toString () == "forecast") {
-                                    taf->ForecastTAF->v_forecasts.emplace_back (std::move (forecast));
-                                } // end read forecast
-                            }
-                        }
-                        if (QXmlStreamReader::EndElement && reader.name ().toString () == "TAF") {
-                            qDebug () << "End " << reader.name ().toString () << '\n';
-                            // main_forecast->v_forecasttaf.emplace_back (std::move (forecast_taf));
-                            reader.skipCurrentElement ();
-                        }
-                    } // end TAF
-                }     // ensd start element
-            }         // end while
-
-            if (reader.hasError ()) {
-                qDebug () << reader.errorString ();
-                exit (0);
-            }
-        } // if end tafs
+        }
         if (sign_buff == "metars") {
             int startPos = buff.indexOf ("</METAR>") + 9;
             int endPos   = buff.indexOf ("</data>");
             int length   = (endPos - startPos);
             buff.remove (startPos, length);
-            metar = std::make_unique<METAR> ();
-            /*
-              QFile* file = new QFile ("G:\\file_" + QDateTime::currentDateTime ().toString ("yyyy_MM_dd_hhmmss") + ".xml");
-              if (file->open (QFile::WriteOnly)) {
-                  file->write (buff.toUtf8 ());
-                  file->close ();
-              }
+        }
 
-              */
-            QXmlStreamReader reader_metar (buff);
-            reader_metar.readNext ();
+        //
+        while (!xmlReader.atEnd () && !xmlReader.hasError ()) {
 
-            while (!reader_metar.atEnd () && !reader_metar.hasError ()) {
-                QXmlStreamReader::TokenType token = reader_metar.readNext ();
-                if (token == QXmlStreamReader::StartDocument) {
-                    continue;
-                }
-                if (token == QXmlStreamReader::StartElement) {
-                    continue;
-                }
+            QXmlStreamReader::TokenType token = xmlReader.readNext ();
+            QString xml_name                  = xmlReader.name ().toString ();
 
-                if (reader_metar.name ().toString () == "response") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "request_index") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "data_source") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "request") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "errors") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "warnings") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "time_taken_ms") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "data") {
-                    continue;
-                }
-                else if (reader_metar.name ().toString () == "METAR") {
-                    continue;
-                } // end METAR
-                else if (reader_metar.name ().toString () == "raw_text") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "station_id") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "observation_time") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "latitude") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "longitude") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "temp_c") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "dewpoint_c") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "wind_dir_degrees") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "wind_speed_kt") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "visibility_statute_mi") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "altim_in_hg") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "quality_control_flags") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "sky_condition sky_cover") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "flight_category ") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "metar_type ") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
-                else if (reader_metar.name ().toString () == "elevation_m ") {
-                    qDebug () << reader_metar.name ().toString () << "\n";
-                }
+            if (token == QXmlStreamReader::StartDocument) {
+                continue;
+            }
+            if (token == QXmlStreamReader::StartElement) {
+                if (xml_name == "response" || xml_name == "request_index" || xml_name == "data_source" || xml_name == "request" || xml_name == "errors"
+                    || xml_name == "warnings" || xml_name == "time_taken_ms" || xml_name == "data" || xml_name == "quality_control_flags" || xml_name == "no_signal"
+                    || xml_name == "flight_category" || xml_name == "metar_type" || xml_name == "elevation_m" || xml_name == "forecast") {
 
-                if (QXmlStreamReader::EndElement && reader_metar.name ().toString () == "METAR") {
-                    qDebug () << "END element" << reader_metar.name ().toString () << "\n";
+                    continue;
                 }
-            } // end while
-        }     // if end metars
-    }         // end for
+                else if (xml_name == "METAR") {
+                    qDebug () << "\tSTART METAR" << xmlReader.name ().toString () << "\n";
+                    continue;
+                }
+                else if (xml_name == "TAF") {
+                    qDebug () << "\tSTART TAF" << xmlReader.name ().toString () << "\n";
+                    continue;
+                }
+                else if (xml_name == "raw_text") {
+                    if (sign_buff == "tafs") {
+                        taf->ForecastTAF->set_raw_text (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setRaw_text (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "station_id") {
+                    if (sign_buff == "tafs") {
+                        taf->ForecastTAF->set_station_id (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setStation_id (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "issue_time") {
+                }
+                else if (xml_name == "observation_time_") {
+                    metar->setObservation_time (xmlReader.readElementText ());
+                }
+                else if (xml_name == "issue_time") {
+                    taf->ForecastTAF->set_issue_time (xmlReader.readElementText ());
+                }
+                else if (xml_name == "bulletin_time") {
+                    taf->ForecastTAF->set_bulletin_time (xmlReader.readElementText ());
+                }
+                else if (xml_name == "valid_time_from") {
+                    taf->ForecastTAF->set_valid_time_from (xmlReader.readElementText ());
+                }
+                else if (xml_name == "fcst_time_from") {
+                    forecast->set_fcst_time_from (xmlReader.readElementText ());
+                }
+                else if (xml_name == "fcst_time_to") {
+                    forecast->set_fcst_time_to (xmlReader.readElementText ());
+                }
+                else if (xml_name == "wind_gust_kt") {
+                    forecast->set_wind_gust_kt (xmlReader.readElementText ());
+                }
+                else if (xml_name == "wind_shear_hgt_ft_agl") {
+                    forecast->set_wind_shear_hgt_ft_agl (xmlReader.readElementText ());
+                }
+                else if (xml_name == "wind_shear_dir_degrees") {
+                    forecast->set_wind_shear_dir_degrees (xmlReader.readElementText ());
+                }
+                else if (xml_name == "wind_shear_speed_kt") {
+                    forecast->set_wind_shear_dir_degrees (xmlReader.readElementText ());
+                }
+                else if (xml_name == "change_indicator") {
+                    forecast->set_change_indicator (xmlReader.readElementText ());
+                }
+                else if (xml_name == "time_becoming") {
+                    forecast->set_time_becoming (xmlReader.readElementText ());
+                }
+                else if (xml_name == "probability") {
+                    forecast->set_probability (xmlReader.readElementText ());
+                }
+                else if (xml_name == "vert_vis_ft") {
+                    forecast->set_vert_vis_ft (xmlReader.readElementText ());
+                }
+                else if (xml_name == "valid_time_to") {
+                    taf->ForecastTAF->set_valid_time_to (xmlReader.readElementText ());
+                }
+                else if (xml_name == "latitude") {
+                    if (sign_buff == "tafs") {
+                        taf->ForecastTAF->set_latitude (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setLatitude (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "longitude") {
+                    if (sign_buff == "tafs") {
+                        taf->ForecastTAF->set_longitude (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setLongitude (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "temp_c") {
+                    metar->setTemp_c (xmlReader.readElementText ());
+                }
+                else if (xml_name == "dewpoint_c") {
+                    metar->setDwepoint_c (xmlReader.readElementText ());
+                }
+                else if (xml_name == "wind_dir_degrees") {
+                    if (sign_buff == "tafs") {
+                        forecast->set_wind_dir_degrees (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setWind_dir_degrees (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "wind_speed_kt") {
+                    if (sign_buff == "tafs") {
+                        forecast->set_wind_speed_kt (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setWind_speed_kt (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "visibility_statute_mi") {
+                    if (sign_buff == "tafs") {
+                        forecast->set_visibility_statute_mi (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setVisibility_statute_mi (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "altim_in_hg") {
+                    metar->setAltim_in_hg (xmlReader.readElementText ());
+                }
+                else if (xml_name == "sea_level_pressure_mb") {
+                    metar->setSea_level_pressure_mb (xmlReader.readElementText ());
+                }
+                else if (xml_name == "wx_string") {
+                    if (sign_buff == "tafs") {
+                        forecast->set_wx_string (xmlReader.readElementText ());
+                    }
+                    if (sign_buff == "metars") {
+                        metar->setWx_string (xmlReader.readElementText ());
+                    }
+                }
+                else if (xml_name == "not_decoded") {
+                    forecast->set_not_decoded (xmlReader.readElementText ());
+                }
+                else if (xml_name == "three_hr_pressure_tendency_mb") {
+                    metar->setThree_hr_pressure_tendency_mb (xmlReader.readElementText ());
+                }
+                else if (xml_name == "maxT_c") {
+                    metar->setMaxT_c (xmlReader.readElementText ());
+                }
+                else if (xml_name == "minT_c") {
+                    metar->setMinT_c (xmlReader.readElementText ());
+                }
+                else if (xml_name == "maxT24hr_c") {
+                    metar->setMaxT24hr_c (xmlReader.readElementText ());
+                }
+                else if (xml_name == "minT24hr_c") {
+                    metar->setMinT24hr_c (xmlReader.readElementText ());
+                }
+                else if (xml_name == "precip_in") {
+                    metar->setPrecip_in (xmlReader.readElementText ());
+                }
+                else if (xml_name == "pcp3hr_in") {
+                    metar->setPcp3hr_in (xmlReader.readElementText ());
+                }
+                else if (xml_name == "pcp6hr_in") {
+                    metar->setPcp6hr_in (xmlReader.readElementText ());
+                }
+                else if (xml_name == "pcp24hr_in") {
+                    metar->setPcp24hr_in (xmlReader.readElementText ());
+                }
+                else if (xml_name == "snow_in") {
+                    metar->setSnow_in (xmlReader.readElementText ());
+                }
+                else if (xml_name == "vert_vis_ft") {
+                    metar->setVert_vis_ft (xmlReader.readElementText ());
+                }
+                else if (xml_name == "sky_condition") {
+                    forecast->set_condition ("sky_condition",
+                      std::make_tuple (xmlReader.attributes ().value ("sky_cover").toString (),
+                        xmlReader.attributes ().value ("cloud_base_ft_agl").toString (), xmlReader.attributes ().value ("cloud_type").toString ()));
+                }
+                else if (xml_name == "turbulence_condition") {
+                    forecast->set_condition ("turbulence_condition", std::make_tuple (xmlReader.attributes ().value ("turbulence_intensity").toString (),
+                                                                       xmlReader.attributes ().value ("turbulence_min_alt_ft_agl").toString (),
+                                                                       xmlReader.attributes ().value ("turbulence_max_alt_ft_agl").toString ()));
+                }
+                else if (xml_name == "icing_condition") {
+                    forecast->set_condition ("icing_condition", std::make_tuple (xmlReader.attributes ().value ("icing_intensity").toString (),
+                                                                  xmlReader.attributes ().value ("icing_min_alt_ft_agl").toString (),
+                                                                  xmlReader.attributes ().value ("icing_max_alt_ft_agl").toString ()));
+                }
+                else
+                    xmlReader.skipCurrentElement ();
+            }
+
+            if (token == QXmlStreamReader::EndElement && xml_name == "TAF") {
+                qDebug () << "\tEND TAF" << xmlReader.name ().toString () << "\n";
+                continue;
+            }
+            if (token == QXmlStreamReader::EndElement && xml_name == "forecast") {
+                //         taf->ForecastTAF->v_forecasts.emplace_back (std::move (forecast));
+            }
+            if (token == QXmlStreamReader::EndElement && xml_name == "METAR") {
+                qDebug () << "\tEND METAR" << xmlReader.name ().toString () << "\n";
+                continue;
+            }
+
+        } // while end file
+
+        if (xmlReader.hasError ()) {
+            qDebug () << xmlReader.errorString ();
+            return;
+        }
+
+    } // end for
 }

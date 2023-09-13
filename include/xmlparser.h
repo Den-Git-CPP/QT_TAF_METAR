@@ -20,5 +20,6 @@ class XMLParser : public QObject {
     std::unique_ptr<METAR> metar = nullptr;
 
   private:
+    QXmlStreamReader xmlReader;
     std::vector<std::tuple<QString, QString>> vec_tuple_data_for_parsing;
 };

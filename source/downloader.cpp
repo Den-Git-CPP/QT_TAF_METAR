@@ -52,13 +52,6 @@ void Downloader::getData (QUrl in_url)
     else {
         QString buff = QString (pReplay->readAll ());
         v_storage_gorecast.emplace_back (std::move (std::make_tuple (weather_forecast_sign_, std::move (buff))));
-        /* SaveTo File
-               QFile* file = new QFile ("G:\\file_" + QDateTime::currentDateTime ().toString ("yyyy_MM_dd_hhmmss") + ".xml");
-               if (file->open (QFile::WriteOnly)) {
-                   file->write (pReplay->readAll ());
-                   file->close ();
-                  }
-        */
     }
     pReplay->deleteLater ();
 }

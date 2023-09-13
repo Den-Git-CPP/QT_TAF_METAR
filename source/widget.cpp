@@ -52,15 +52,10 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     connect (bt_UUEE, &QPushButton::clicked, weather, [=] () {
         weather->start_close_timer ();
     });
-
+    // передача вектора с буфером в парсер
     connect (downloader, &Downloader::onReady, xmlparser, [=] () {
         xmlparser->set_vec_buf_xml (downloader->get_vec_buf_xml ());
         xmlparser->fill_u_ptr_Forecast ();
-
-        //  xmlparser->create_shr_ptr_forecast ();
-
-        // taf->v_forecasttaf.resize (1); // БЕРЕМ ТОЛЬКО ПЕРВЫЙ ЭЛЕМЕНТ
-
         //  формируется строка прогноза
         // weather->set_name_airport (taf->v_forecasttaf.at (0)->station_id ());
         // weather->set_text_forecast (forming_text_forecast ());
