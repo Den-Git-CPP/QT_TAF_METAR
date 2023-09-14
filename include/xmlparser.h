@@ -16,8 +16,9 @@ class XMLParser : public QObject {
     ~XMLParser ();
     void set_vec_buf_xml (const std::vector<std::tuple<QString, QString>>& in_vec_tuple_data_for_parsing);
     void fill_u_ptr_Forecast ();
-    std::unique_ptr<TAF> taf     = nullptr;
-    std::unique_ptr<METAR> metar = nullptr;
+    std::unique_ptr<TAF> taf           = nullptr;
+    std::unique_ptr<METAR> metar       = nullptr;
+    std::unique_ptr<Forecast> forecast = nullptr;
 
   private:
     QXmlStreamReader xmlReader;

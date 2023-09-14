@@ -9,6 +9,6 @@ class TAF {
     explicit TAF ();
     ~TAF ();
 
-    std::unique_ptr<Forecast_Title> ForecastTitle = nullptr;
-    std::unique_ptr<Forecast_TAF> ForecastTAF     = nullptr;
+    //  std::unique_ptr<Forecast_Title> ForecastTitle = nullptr;
+    std::unique_ptr<Forecast_TAF> ForecastTAF = nullptr;
 };

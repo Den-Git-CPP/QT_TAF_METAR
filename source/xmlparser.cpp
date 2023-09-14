@@ -12,25 +12,10 @@ void XMLParser::set_vec_buf_xml (const std::vector<std::tuple<QString, QString> 
 
 void XMLParser::fill_u_ptr_Forecast ()
 {
-    taf           = std::make_unique<TAF> ();
-    metar         = std::make_unique<METAR> ();
-    auto forecast = std::make_unique<Forecast> ();
+    taf   = std::make_unique<TAF> ();
+    metar = std::make_unique<METAR> ();
     for (auto& [sign_buff, buff] : vec_tuple_data_for_parsing) {
-        if (sign_buff == "tafs") {
-            // Берем первый прогноз
-            int startPos = buff.indexOf ("</TAF>") + 9;
-            int endPos   = buff.indexOf ("</data>");
-            int length   = (endPos - startPos);
-            buff.remove (startPos, length);
-        }
-        if (sign_buff == "metars") {
-            int startPos = buff.indexOf ("</METAR>") + 9;
-            int endPos   = buff.indexOf ("</data>");
-            int length   = (endPos - startPos);
-            buff.remove (startPos, length);
-        }
-
-        //
+        QXmlStreamReader xmlReader (buff);
         while (!xmlReader.atEnd () && !xmlReader.hasError ()) {
 
             QXmlStreamReader::TokenType token = xmlReader.readNext ();
@@ -40,18 +25,27 @@ void XMLParser::fill_u_ptr_Forecast ()
                 continue;
             }
             if (token == QXmlStreamReader::StartElement) {
-                if (xml_name == "response" || xml_name == "request_index" || xml_name == "data_source" || xml_name == "request" || xml_name == "errors"
-                    || xml_name == "warnings" || xml_name == "time_taken_ms" || xml_name == "data" || xml_name == "quality_control_flags" || xml_name == "no_signal"
-                    || xml_name == "flight_category" || xml_name == "metar_type" || xml_name == "elevation_m" || xml_name == "forecast") {
+                if (xml_name == "response"                 //
+                    || xml_name == "request_index"         //
+                    || xml_name == "data_source"           //
+                    || xml_name == "request"               //
+                    || xml_name == "errors"                //
+                    || xml_name == "warnings"              //
+                    || xml_name == "time_taken_ms"         //
+                    || xml_name == "data"                  //
+                    || xml_name == "quality_control_flags" //
+                    || xml_name == "no_signal"             //
+                    || xml_name == "flight_category"       //
+                    || xml_name == "metar_type"            //
+                    || xml_name == "elevation_m"           //
+                    || xml_name == "METAR"                 //
+                    || xml_name == "TAF"                   //
+                ) {
+                    continue;
+                }
 
-                    continue;
-                }
-                else if (xml_name == "METAR") {
-                    qDebug () << "\tSTART METAR" << xmlReader.name ().toString () << "\n";
-                    continue;
-                }
-                else if (xml_name == "TAF") {
-                    qDebug () << "\tSTART TAF" << xmlReader.name ().toString () << "\n";
+                else if (xml_name == "forecast") {
+                    forecast = std::make_unique<Forecast> ();
                     continue;
                 }
                 else if (xml_name == "raw_text") {
@@ -214,9 +208,16 @@ void XMLParser::fill_u_ptr_Forecast ()
                     metar->setVert_vis_ft (xmlReader.readElementText ());
                 }
                 else if (xml_name == "sky_condition") {
-                    forecast->set_condition ("sky_condition",
-                      std::make_tuple (xmlReader.attributes ().value ("sky_cover").toString (),
-                        xmlReader.attributes ().value ("cloud_base_ft_agl").toString (), xmlReader.attributes ().value ("cloud_type").toString ()));
+                    if (sign_buff == "tafs") {
+                        forecast->set_condition ("sky_condition", std::make_tuple (xmlReader.attributes ().value ("sky_cover").toString (),
+                                                                    xmlReader.attributes ().value ("cloud_base_ft_agl").toString (), //
+                                                                    xmlReader.attributes ().value ("cloud_type").toString ()));
+                    };
+                    if (sign_buff == "metars") {
+                        metar->set_condition ("sky_condition", std::make_tuple (xmlReader.attributes ().value ("sky_cover").toString (),
+                                                                 xmlReader.attributes ().value ("cloud_base_ft_agl").toString (), //
+                                                                 xmlReader.attributes ().value ("cloud_type").toString ()));
+                    };
                 }
                 else if (xml_name == "turbulence_condition") {
                     forecast->set_condition ("turbulence_condition", std::make_tuple (xmlReader.attributes ().value ("turbulence_intensity").toString (),
@@ -233,15 +234,13 @@ void XMLParser::fill_u_ptr_Forecast ()
             }
 
             if (token == QXmlStreamReader::EndElement && xml_name == "TAF") {
-                qDebug () << "\tEND TAF" << xmlReader.name ().toString () << "\n";
-                continue;
+                break;
             }
             if (token == QXmlStreamReader::EndElement && xml_name == "forecast") {
-                //         taf->ForecastTAF->v_forecasts.emplace_back (std::move (forecast));
+                taf->ForecastTAF->v_forecasts.emplace_back (std::move (forecast));
             }
             if (token == QXmlStreamReader::EndElement && xml_name == "METAR") {
-                qDebug () << "\tEND METAR" << xmlReader.name ().toString () << "\n";
-                continue;
+                break;
             }
 
         } // while end file

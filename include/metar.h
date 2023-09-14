@@ -3,6 +3,7 @@
 #include "./include/function.h"
 
 #include <memory>
+#include <QList>
 class METAR : private Function {
   public:
     explicit METAR ();
@@ -66,6 +67,9 @@ class METAR : private Function {
     void setElevation_m (const QString& newElevation_m);
     void setWind_dir_degrees (const QString& newWind_dir_degrees);
     void setWind_speed_kt (const QString& newWind_speed_kt);
+    void set_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node);
+
+    const QList<std::tuple<QString, QString, QString>>& getTuple_list_sky_condition () const;
 
   private:
     QString raw_text_{};   //
@@ -95,8 +99,9 @@ class METAR : private Function {
     QString vert_vis_ft_{};                   //
     QString metar_type_{};                    //
     QString elevation_m_{};                   //
+    QList<std::tuple<QString, QString, QString>> tuple_list_sky_condition;
 
-    std::shared_ptr<Forecast_Title> ForecastTitle = nullptr;
+    // std::shared_ptr<Forecast_Title> ForecastTitle = nullptr;
     // std::shared_ptr<Wind> wind = nullptr;
     // std::shared_ptr<Station_Sensors> station_sensors = nullptr;
     // std::shared_ptr<sky_cover> = nullptr;

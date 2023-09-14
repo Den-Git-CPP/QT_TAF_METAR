@@ -38,6 +38,13 @@ void METAR::setTemp_c (const QString& newTemp_c) { temp_c_ = newTemp_c; }
 void METAR::setDwepoint_c (const QString& newDwepoint_c) { dwepoint_c_ = newDwepoint_c; }
 void METAR::setWind_dir_degrees (const QString& newWind_dir_degrees) { wind_dir_degrees = newWind_dir_degrees; }
 void METAR::setWind_speed_kt (const QString& newWind_speed_kt) { wind_speed_kt = newWind_speed_kt; }
+void METAR::set_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node)
+{
+    Function::replace_tuple_sky_condition (node);
+    tuple_list_sky_condition.append (node);
+}
+
+const QList<std::tuple<QString, QString, QString> >& METAR::getTuple_list_sky_condition () const { return tuple_list_sky_condition; }
 void METAR::setVisibility_statute_mi (const QString& newVisibility_statute_mi) { visibility_statute_mi_ = newVisibility_statute_mi; }
 void METAR::setAltim_in_hg (const QString& newAltim_in_hg) { altim_in_hg_ = newAltim_in_hg; }
 void METAR::setSea_level_pressure_mb (const QString& newSea_level_pressure_mb) { sea_level_pressure_mb_ = newSea_level_pressure_mb; }
