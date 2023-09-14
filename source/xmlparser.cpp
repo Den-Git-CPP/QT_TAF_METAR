@@ -10,7 +10,7 @@ void XMLParser::set_vec_buf_xml (const std::vector<std::tuple<QString, QString> 
     vec_tuple_data_for_parsing = std::move (in_vec_tuple_data_for_parsing);
 }
 
-void XMLParser::fill_u_ptr_Forecast ()
+void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
 {
     taf   = std::make_unique<TAF> ();
     metar = std::make_unique<METAR> ();
