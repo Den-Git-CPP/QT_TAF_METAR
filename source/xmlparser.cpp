@@ -37,7 +37,20 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                     || xml_name == "no_signal"             //
                     || xml_name == "flight_category"       //
                     || xml_name == "metar_type"            //
+                    || xml_name == "latitude"              //
+                    || xml_name == "longitude"             //
                     || xml_name == "elevation_m"           //
+                    || xml_name == "sea_level_pressure_mb"         //
+                    || xml_name == "three_hr_pressure_tendency_mb" //
+                    || xml_name == "maxT_c"                        //
+                    || xml_name == "minT_c"                        //
+                    || xml_name == "maxT24hr_c"                    //
+                    || xml_name == "minT24hr_c"                    //
+                    || xml_name == "precip_in"                     //
+                    || xml_name == "pcp3hr_in"                     //
+                    || xml_name == "pcp6hr_in"                     //
+                    || xml_name == "pcp24hr_in"                    //
+                    || xml_name == "sea_level_pressure_mb" //
                     || xml_name == "METAR"                 //
                     || xml_name == "TAF"                   //
                 ) {
@@ -50,7 +63,7 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                 }
                 else if (xml_name == "raw_text") {
                     if (sign_buff == "tafs") {
-                        taf->ForecastTAF->set_raw_text (xmlReader.readElementText ());
+                        taf->set_raw_text (xmlReader.readElementText ());
                     };
                     if (sign_buff == "metars") {
                         metar->setRaw_text (xmlReader.readElementText ());
@@ -58,25 +71,23 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                 }
                 else if (xml_name == "station_id") {
                     if (sign_buff == "tafs") {
-                        taf->ForecastTAF->set_station_id (xmlReader.readElementText ());
+                        taf->set_station_id (xmlReader.readElementText ());
                     };
                     if (sign_buff == "metars") {
                         metar->setStation_id (xmlReader.readElementText ());
                     };
                 }
-                else if (xml_name == "issue_time") {
-                }
-                else if (xml_name == "observation_time_") {
+                else if (xml_name == "observation_time") {
                     metar->setObservation_time (xmlReader.readElementText ());
                 }
                 else if (xml_name == "issue_time") {
-                    taf->ForecastTAF->set_issue_time (xmlReader.readElementText ());
+                    taf->set_issue_time (xmlReader.readElementText ());
                 }
                 else if (xml_name == "bulletin_time") {
-                    taf->ForecastTAF->set_bulletin_time (xmlReader.readElementText ());
+                    taf->set_bulletin_time (xmlReader.readElementText ());
                 }
                 else if (xml_name == "valid_time_from") {
-                    taf->ForecastTAF->set_valid_time_from (xmlReader.readElementText ());
+                    taf->set_valid_time_from (xmlReader.readElementText ());
                 }
                 else if (xml_name == "fcst_time_from") {
                     forecast->set_fcst_time_from (xmlReader.readElementText ());
@@ -84,9 +95,30 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                 else if (xml_name == "fcst_time_to") {
                     forecast->set_fcst_time_to (xmlReader.readElementText ());
                 }
-                else if (xml_name == "wind_gust_kt") {
-                    forecast->set_wind_gust_kt (xmlReader.readElementText ());
+                else if (xml_name == "wind_speed_kt") {
+                    if (sign_buff == "tafs") {
+                        forecast->set_wind_speed_kt (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setWind_speed_kt (xmlReader.readElementText ());
+                    };
                 }
+                else if (xml_name == "wind_dir_degrees") {
+                    if (sign_buff == "tafs") {
+                        forecast->set_wind_dir_degrees (xmlReader.readElementText ());
+                    };
+                    if (sign_buff == "metars") {
+                        metar->setWind_dir_degrees (xmlReader.readElementText ());
+                    };
+                }
+                else if (xml_name == "wind_gust_kt") {
+                    if (sign_buff == "tafs"){
+                        forecast->set_wind_gust_kt (xmlReader.readElementText ());
+                    }
+                    if (sign_buff == "metars") {
+                        metar->setWind_gust_kt (xmlReader.readElementText ());
+                    };
+                 }
                 else if (xml_name == "wind_shear_hgt_ft_agl") {
                     forecast->set_wind_shear_hgt_ft_agl (xmlReader.readElementText ());
                 }
@@ -109,23 +141,7 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                     forecast->set_vert_vis_ft (xmlReader.readElementText ());
                 }
                 else if (xml_name == "valid_time_to") {
-                    taf->ForecastTAF->set_valid_time_to (xmlReader.readElementText ());
-                }
-                else if (xml_name == "latitude") {
-                    if (sign_buff == "tafs") {
-                        taf->ForecastTAF->set_latitude (xmlReader.readElementText ());
-                    };
-                    if (sign_buff == "metars") {
-                        metar->setLatitude (xmlReader.readElementText ());
-                    };
-                }
-                else if (xml_name == "longitude") {
-                    if (sign_buff == "tafs") {
-                        taf->ForecastTAF->set_longitude (xmlReader.readElementText ());
-                    };
-                    if (sign_buff == "metars") {
-                        metar->setLongitude (xmlReader.readElementText ());
-                    };
+                    taf->set_valid_time_to (xmlReader.readElementText ());
                 }
                 else if (xml_name == "temp_c") {
                     metar->setTemp_c (xmlReader.readElementText ());
@@ -133,22 +149,8 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                 else if (xml_name == "dewpoint_c") {
                     metar->setDwepoint_c (xmlReader.readElementText ());
                 }
-                else if (xml_name == "wind_dir_degrees") {
-                    if (sign_buff == "tafs") {
-                        forecast->set_wind_dir_degrees (xmlReader.readElementText ());
-                    };
-                    if (sign_buff == "metars") {
-                        metar->setWind_dir_degrees (xmlReader.readElementText ());
-                    };
-                }
-                else if (xml_name == "wind_speed_kt") {
-                    if (sign_buff == "tafs") {
-                        forecast->set_wind_speed_kt (xmlReader.readElementText ());
-                    };
-                    if (sign_buff == "metars") {
-                        metar->setWind_speed_kt (xmlReader.readElementText ());
-                    };
-                }
+
+
                 else if (xml_name == "visibility_statute_mi") {
                     if (sign_buff == "tafs") {
                         forecast->set_visibility_statute_mi (xmlReader.readElementText ());
@@ -157,12 +159,8 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                         metar->setVisibility_statute_mi (xmlReader.readElementText ());
                     };
                 }
-                else if (xml_name == "altim_in_hg") {
-                    metar->setAltim_in_hg (xmlReader.readElementText ());
-                }
-                else if (xml_name == "sea_level_pressure_mb") {
-                    metar->setSea_level_pressure_mb (xmlReader.readElementText ());
-                }
+
+
                 else if (xml_name == "wx_string") {
                     if (sign_buff == "tafs") {
                         forecast->set_wx_string (xmlReader.readElementText ());
@@ -173,33 +171,6 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                 }
                 else if (xml_name == "not_decoded") {
                     forecast->set_not_decoded (xmlReader.readElementText ());
-                }
-                else if (xml_name == "three_hr_pressure_tendency_mb") {
-                    metar->setThree_hr_pressure_tendency_mb (xmlReader.readElementText ());
-                }
-                else if (xml_name == "maxT_c") {
-                    metar->setMaxT_c (xmlReader.readElementText ());
-                }
-                else if (xml_name == "minT_c") {
-                    metar->setMinT_c (xmlReader.readElementText ());
-                }
-                else if (xml_name == "maxT24hr_c") {
-                    metar->setMaxT24hr_c (xmlReader.readElementText ());
-                }
-                else if (xml_name == "minT24hr_c") {
-                    metar->setMinT24hr_c (xmlReader.readElementText ());
-                }
-                else if (xml_name == "precip_in") {
-                    metar->setPrecip_in (xmlReader.readElementText ());
-                }
-                else if (xml_name == "pcp3hr_in") {
-                    metar->setPcp3hr_in (xmlReader.readElementText ());
-                }
-                else if (xml_name == "pcp6hr_in") {
-                    metar->setPcp6hr_in (xmlReader.readElementText ());
-                }
-                else if (xml_name == "pcp24hr_in") {
-                    metar->setPcp24hr_in (xmlReader.readElementText ());
                 }
                 else if (xml_name == "snow_in") {
                     metar->setSnow_in (xmlReader.readElementText ());
@@ -214,7 +185,7 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                                                                     xmlReader.attributes ().value ("cloud_type").toString ()));
                     };
                     if (sign_buff == "metars") {
-                        metar->set_condition ("sky_condition", std::make_tuple (xmlReader.attributes ().value ("sky_cover").toString (),
+                        metar->setSky_condition ("sky_condition", std::make_tuple (xmlReader.attributes ().value ("sky_cover").toString (),
                                                                  xmlReader.attributes ().value ("cloud_base_ft_agl").toString (), //
                                                                  xmlReader.attributes ().value ("cloud_type").toString ()));
                     };
@@ -237,7 +208,7 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                 break;
             }
             if (token == QXmlStreamReader::EndElement && xml_name == "forecast") {
-                taf->ForecastTAF->v_forecasts.emplace_back (std::move (forecast));
+                taf->v_forecasts.emplace_back (std::move (forecast));
             }
             if (token == QXmlStreamReader::EndElement && xml_name == "METAR") {
                 break;

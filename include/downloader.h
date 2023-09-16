@@ -25,5 +25,5 @@ class Downloader : public QObject {
     QMultiMap<QString, QString> map_weather_forecast_sign; // QMultiMap (признак прогноза аэропорт)
     QString weather_forecast_sign_{};
     QString airport_IKAO_name_{};
-    std::vector<std::tuple<QString, QString>> v_storage_gorecast{};
+    std::vector<std::tuple<QString, QString>> v_storage_forecast{};
 };
