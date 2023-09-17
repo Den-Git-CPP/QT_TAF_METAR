@@ -1,6 +1,6 @@
 #include "./include/forecast.h"
 
-Forecast::Forecast () { Function::Load_AMOFSG_Dictionary (); }
+Forecast::Forecast () {}
 
 Forecast::~Forecast () {}
 

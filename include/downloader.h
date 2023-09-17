@@ -20,8 +20,10 @@ class Downloader : public QObject {
   public slots:
     void getData (QUrl in_url);
     void getDataForecast ();
+    void onResult (QNetworkReply* reply);
 
   private:
+    QNetworkAccessManager* manager;
     QMultiMap<QString, QString> map_weather_forecast_sign; // QMultiMap (признак прогноза аэропорт)
     QString weather_forecast_sign_{};
     QString airport_IKAO_name_{};

@@ -1,8 +1,5 @@
 #pragma once
 #include "./include/function.h"
-/*
- *
-*/
 #include <memory>
 #include <QList>
 class METAR : private Function {
@@ -17,7 +14,7 @@ class METAR : private Function {
     const QString& getDwepoint_c () const;
     const QString& getWind_dir_degrees () const;
     const QString& getWind_speed_kt () const;
-    const QString& getWind_gust_kt() const;
+    const QString& getWind_gust_kt () const;
     const QString& getVisibility_statute_mi () const;
     const QString& getAltim_in_hg () const;
     const QString& getWx_string () const;
@@ -33,7 +30,7 @@ class METAR : private Function {
     void setDwepoint_c (const QString& newDwepoint_c);
     void setWind_dir_degrees (const QString& newWind_dir_degrees);
     void setWind_speed_kt (const QString& newWind_speed_kt);
-    void setWind_gust_kt(const QString &newWind_gust_kt);
+    void setWind_gust_kt (const QString& newWind_gust_kt);
     void setVisibility_statute_mi (const QString& newVisibility_statute_mi);
     void setAltim_in_hg (const QString& newAltim_in_hg);
     void setWx_string (const QString& newWx_string);
@@ -45,22 +42,21 @@ class METAR : private Function {
 
     const QList<std::tuple<QString, QString, QString>>& getTuple_list_sky_condition () const;
 
-
-private:
+  private:
     QString raw_text_{};   //
     QString station_id_{}; //
     QString observation_time_{};
-  //  QString latitude_{};                      //
-  //  QString longitude_{};                     //
-    QString temp_c_{};                        //
-    QString dwepoint_c_{};                    //
-    QString wind_dir_degrees{};               //
-    QString wind_speed_kt{};                  //
-    QString	wind_gust_kt{};
-    QString visibility_statute_mi_{};         //
-    QString altim_in_hg_{};                   //
+    //  QString latitude_{};                      //
+    //  QString longitude_{};                     //
+    QString temp_c_{};          //
+    QString dwepoint_c_{};      //
+    QString wind_dir_degrees{}; //
+    QString wind_speed_kt{};    //
+    QString wind_gust_kt{};
+    QString visibility_statute_mi_{}; //
+    QString altim_in_hg_{};           //
     //QString sea_level_pressure_mb_{};         //
-    QString wx_string_{};                     //
+    QString wx_string_{}; //
     //QString flight_category_{};               //
     //QString three_hr_pressure_tendency_mb_{}; //
     //QString maxT_c_{};                        //
@@ -71,8 +67,8 @@ private:
     //QString pcp3hr_in_{};                     //
     //QString pcp6hr_in_{};                     //
     //QString pcp24hr_in_{};                    //
-    QString snow_in_{};                       //
-    QString vert_vis_ft_{};                   //
+    QString snow_in_{};     //
+    QString vert_vis_ft_{}; //
     //QString metar_type_{};                    //
     //QString elevation_m_{};                   //
     QList<std::tuple<QString, QString, QString>> tuple_list_sky_condition;

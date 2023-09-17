@@ -80,140 +80,150 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 
 Widget::~Widget () {}
 QString Widget::forming_text_forecast ()
-{   QString text_metar{};
-    if(!xmlparser->metar->getStation_id().isEmpty()){
-        text_metar.append(xmlparser->metar->getStation_id());
-    };
-    if(!xmlparser->metar->getObservation_time().isEmpty()){
-        text_metar.append(" METAR за "+xmlparser->metar->getObservation_time());
+{
+    QString text_metar{};
+
+    if (!xmlparser->metar->getObservation_time ().isEmpty ()) {
+        text_metar.append ("ФАКТИЧЕСКАЯ за" + xmlparser->metar->getObservation_time ());
     };
 
-     if(!xmlparser->metar->getRaw_text().isEmpty()){
-        text_metar.append("\n"+xmlparser->metar->getRaw_text());
+    if (!xmlparser->metar->getRaw_text ().isEmpty ()) {
+        text_metar.append ("\n" + xmlparser->metar->getRaw_text ());
     };
-    if(!xmlparser->metar->getWind_dir_degrees().isEmpty()){
-        text_metar.append("\nВетер: "+xmlparser->metar->getWind_dir_degrees()+"°");
+    if (!xmlparser->metar->getWind_dir_degrees ().isEmpty ()) {
+        text_metar.append ("\nВетер: " + xmlparser->metar->getWind_dir_degrees () + "°");
     };
-    if(!xmlparser->metar->getWind_speed_kt().isEmpty()){
-        text_metar.append(" "+xmlparser->metar->getWind_speed_kt()+"м/с");
-    };
-
-    if(!xmlparser->metar->getVisibility_statute_mi().isEmpty()){
-        text_metar.append("\nВидимость: "+xmlparser->metar->getVisibility_statute_mi()+"м");
-    };
-    if(!xmlparser->metar->getVert_vis_ft().isEmpty()){
-        text_metar.append("\nВертикальная видимость:"+xmlparser->metar->getVert_vis_ft());
+    if (!xmlparser->metar->getWind_speed_kt ().isEmpty ()) {
+        text_metar.append (" " + xmlparser->metar->getWind_speed_kt () + "м/с");
     };
 
-    if(!xmlparser->metar->getTemp_c().isEmpty()){
-        text_metar.append("\nТемпература: "+xmlparser->metar->getTemp_c()+"°C"); };
-    if(!xmlparser->metar->getDwepoint_c().isEmpty()){
-        text_metar.append("\nТочка россы: "+xmlparser->metar->getDwepoint_c()+"°C");
+    if (!xmlparser->metar->getVisibility_statute_mi ().isEmpty ()) {
+        text_metar.append ("\nВидимость: ").append (xmlparser->metar->getVisibility_statute_mi ()).append ("м");
+    };
+    if (!xmlparser->metar->getVert_vis_ft ().isEmpty ()) {
+        text_metar.append ("\nВертикальная видимость:" + xmlparser->metar->getVert_vis_ft ());
     };
 
-
-    if(!xmlparser->metar->getAltim_in_hg().isEmpty()){
-        text_metar.append("\nQNH: "+xmlparser->metar->getAltim_in_hg());
+    if (!xmlparser->metar->getTuple_list_sky_condition ().isEmpty ()) {
+        for (auto elem : xmlparser->metar->getTuple_list_sky_condition ()) {
+            text_metar.append ("\n" + QString (std::get<0> (elem))).append (" ");
+            text_metar.append (QString (std::get<1> (elem))).append (" ");
+            text_metar.append (QString (std::get<2> (elem))).append (" ");
+        }
     };
 
-    if(!xmlparser->metar->getSnow_in().isEmpty()){
-        text_metar.append("\nГлубина снега на земле:"+xmlparser->metar->getSnow_in());
+    if (!xmlparser->metar->getTemp_c ().isEmpty ()) {
+        text_metar.append ("\nТемпература: " + xmlparser->metar->getTemp_c () + "°C");
+    };
+    if (!xmlparser->metar->getDwepoint_c ().isEmpty ()) {
+        text_metar.append ("\nТочка россы: " + xmlparser->metar->getDwepoint_c () + "°C");
     };
 
+    if (!xmlparser->metar->getAltim_in_hg ().isEmpty ()) {
+        text_metar.append ("\nQNH: " + xmlparser->metar->getAltim_in_hg ());
+    };
 
-/* TAF
-    QString text_taf = "ПРОГНОЗ СОСТАВЛЕН: " + xmlparser->taf->bulletin_time ();
+    if (!xmlparser->metar->getSnow_in ().isEmpty ()) {
+        text_metar.append ("\nГлубина снега на земле:" + xmlparser->metar->getSnow_in ());
+    };
 
+    // TAF
+    QString text_taf{};
     if (xmlparser->taf->valid_time_from () != "") {
-        text_taf.append ("\nДЕЙСТВУЕТ С " + xmlparser->taf->valid_time_from () + " ");
+        text_taf.append ("\nПРОГНОЗ НА ПЕРИОД С " + xmlparser->taf->valid_time_from () + " ");
     }
     if (xmlparser->taf->valid_time_to () != "") {
-        text_taf.append ("ПО " + xmlparser->taf->valid_time_to ());
+        text_taf.append (" ПО " + xmlparser->taf->valid_time_to ()).append (" \n");
     }
     if (xmlparser->taf->raw_text () != "") {
-        text_taf.append ("\n\n" + xmlparser->taf->raw_text ());
+        text_taf.append (xmlparser->taf->raw_text ());
     }
-*/
+
+    for (const auto& forecast : xmlparser->taf->v_forecasts) {
+
+        if (forecast->fcst_time_from () != "") {
+            text_taf.append ("\n-В период с " + forecast->fcst_time_from () + " ");
+        }
+        if (forecast->fcst_time_to () != "") {
+            text_taf.append ("по " + forecast->fcst_time_to ());
+        }
+        if (forecast->change_indicator () != "") {
+            text_taf.append ("\n    " + forecast->change_indicator () + " ");
+        }
+        if (forecast->time_becoming () != "") {
+            text_taf.append ("начиная с " + forecast->time_becoming () + " ");
+        }
+        if (forecast->probability () != "") {
+            text_taf.append ("\nс вероятностью" + forecast->probability ());
+        }
+        if (forecast->wind_dir_degrees () != "") {
+            text_taf.append ("\n    Ветер: " + forecast->wind_dir_degrees () + "° ");
+        }
+        if (forecast->wind_speed_kt () != "") {
+            text_taf.append (forecast->wind_speed_kt () + " м/с ");
+        }
+        if (forecast->wind_gust_kt () != "") {
+            text_taf.append (" (порывы " + forecast->wind_gust_kt () + " м/с)");
+        };
+        if (forecast->wind_shear_hgt_ft_agl () != "") {
+            text_taf.append ("\n    Сдвиг ветера на " + forecast->wind_shear_hgt_ft_agl () + "м. ");
+        };
+        if (forecast->wind_shear_dir_degrees () != "") {
+            text_taf.append (forecast->wind_shear_dir_degrees () + "° ");
+        };
+        if (forecast->wind_shear_speed_kt () != "") {
+            text_taf.append (forecast->wind_shear_speed_kt () + " м/с ");
+        };
+    }
     /*
-    QString _text_forecasts{ "" };
-    for (auto forecast : taf->v_forecasttaf.at (0)->v_forecasts) {
-    if (forecast->fcst_time_from () != "") {
-    _text_forecasts.append ("\n\n-В период с " + forecast->fcst_time_from () + " ");
-    }
-    if (forecast->fcst_time_to () != "") {
-    _text_forecasts.append ("по " + forecast->fcst_time_to ());
-    }
-    if (forecast->change_indicator () != "") {
-    _text_forecasts.append ("\n    " + forecast->change_indicator () + " ");
-    }
-    if (forecast->time_becoming () != "") {
-    _text_forecasts.append ("начиная с " + forecast->time_becoming () + " ");
-    }
-    if (forecast->probability () != "") {
-    _text_forecasts.append ("\nс вероятностью" + forecast->probability ());
-    }
-    if (forecast->wind_dir_degrees () != "") {
-    _text_forecasts.append ("\n    Ветер: " + forecast->wind_dir_degrees () + "° ");
-    }
-    if (forecast->wind_speed_kt () != "") {
-    _text_forecasts.append (forecast->wind_speed_kt () + " м/с ");
-    }
-    if (forecast->wind_gust_kt () != "") {
-    _text_forecasts.append (" (порывы " + forecast->wind_gust_kt () + " м/с)");
-    };
-    if (forecast->wind_shear_hgt_ft_agl () != "") {
-    _text_forecasts.append ("\n    Сдвиг ветера на " + forecast->wind_shear_hgt_ft_agl () + "м. ");
-    };
-    if (forecast->wind_shear_dir_degrees () != "") {
-    _text_forecasts.append (forecast->wind_shear_dir_degrees () + "° ");
-    };
-    if (forecast->wind_shear_speed_kt () != "") {
-    _text_forecasts.append (forecast->wind_shear_speed_kt () + " м/с ");
-    };
-    // видимость
-    if (forecast->visibility_statute_mi () != "") {
-    _text_forecasts.append ("\n    Видимость: " + forecast->visibility_statute_mi () + " м. ");
-    };
 
-    if (!forecast->tuple_list_sky_condition ().empty ()) {
+        for (auto forecast : taf->v_forecasttaf.at (0)->v_forecasts) {
 
-    for (auto elem : forecast->tuple_list_sky_condition ()) {
-    _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append ("\t");
-    _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-    _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-    }
-    };
 
-    if (forecast->altim_in_hg () != "") {
-    _text_forecasts.append ("\n    Нижняя граница облачности:" + forecast->altim_in_hg () + " м. ");
-    };
-    if (forecast->vert_vis_ft () != "") {
-    _text_forecasts.append ("\n    Вертикальная видимость:" + forecast->vert_vis_ft () + " м. ");
-    };
-    if (forecast->wx_string () != "") {
-    _text_forecasts.append ("\n    " + forecast->wx_string () + " ");
-    };
-    if (forecast->not_decoded () != "") {
-    // НЕ ВЫВОДИТЬ :_text_forecasts.append ("\n Данные не расшифрованы:" + forecast->not_decoded () + " ");
-    };
+        // видимость
+        if (forecast->visibility_statute_mi () != "") {
+        _text_forecasts.append ("\n    Видимость: " + forecast->visibility_statute_mi () + " м. ");
+        };
 
-    if (!forecast->turbulence_list_condition ().empty ()) {
-    for (auto elem : forecast->turbulence_list_condition ()) {
-    _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
-    _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-    _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-    }
-    };
-    if (!forecast->icing_list_condition ().empty ()) {
-    for (auto elem : forecast->icing_list_condition ()) {
-    _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
-    _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-    _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-    }
-    };
-    }
-    */
-    return text_metar;
+        if (!forecast->tuple_list_sky_condition ().empty ()) {
+
+        for (auto elem : forecast->tuple_list_sky_condition ()) {
+        _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append ("\t");
+        _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+        _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+        }
+        };
+
+        if (forecast->altim_in_hg () != "") {
+        _text_forecasts.append ("\n    Нижняя граница облачности:" + forecast->altim_in_hg () + " м. ");
+        };
+        if (forecast->vert_vis_ft () != "") {
+        _text_forecasts.append ("\n    Вертикальная видимость:" + forecast->vert_vis_ft () + " м. ");
+        };
+        if (forecast->wx_string () != "") {
+        _text_forecasts.append ("\n    " + forecast->wx_string () + " ");
+        };
+        if (forecast->not_decoded () != "") {
+        // НЕ ВЫВОДИТЬ :_text_forecasts.append ("\n Данные не расшифрованы:" + forecast->not_decoded () + " ");
+        };
+
+        if (!forecast->turbulence_list_condition ().empty ()) {
+        for (auto elem : forecast->turbulence_list_condition ()) {
+        _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+        _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+        _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+        }
+        };
+        if (!forecast->icing_list_condition ().empty ()) {
+        for (auto elem : forecast->icing_list_condition ()) {
+        _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+        _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
+        _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
+        }
+        };
+        }
+        */
+    return text_metar + "\n" + text_taf;
 }
 void Widget::Show_weather ()
 {

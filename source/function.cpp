@@ -2,7 +2,11 @@
 
 #include <QList>
 
-Function::Function () {}
+Function::Function ()
+{
+    //
+    Function::Load_AMOFSG_Dictionary ();
+}
 
 QString Function::replace_id_staion (const QString& _id_str)
 {

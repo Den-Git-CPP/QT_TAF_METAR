@@ -27,8 +27,6 @@ set(PROJECT_HEADERS
     include/xmlparser.h
     include/function.h
     include/taf.h
-    include/forecast_title.h
-    include/forecast_taf.h
     include/forecast.h
     include/metar.h
     )
@@ -40,8 +38,6 @@ set(PROJECT_SOURCES
     source/xmlparser.cpp
     source/function.cpp
     source/taf.cpp
-    source/forecast_title.cpp
-    source/forecast_taf.cpp
     source/forecast.cpp
     source/metar.cpp
 
