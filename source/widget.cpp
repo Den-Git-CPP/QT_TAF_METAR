@@ -84,7 +84,7 @@ QString Widget::forming_text_forecast ()
     QString text_metar{};
 
     if (!xmlparser->metar->getObservation_time ().isEmpty ()) {
-        text_metar.append ("ФАКТИЧЕСКАЯ за" + xmlparser->metar->getObservation_time ());
+        text_metar.append ("ФАКТИЧЕСКАЯ за " + xmlparser->metar->getObservation_time ());
     };
 
     if (!xmlparser->metar->getRaw_text ().isEmpty ()) {
@@ -119,8 +119,9 @@ QString Widget::forming_text_forecast ()
         text_metar.append ("\nТочка россы: " + xmlparser->metar->getDwepoint_c () + "°C");
     };
 
-    if (!xmlparser->metar->getAltim_in_hg ().isEmpty ()) {
-        text_metar.append ("\nQNH: " + xmlparser->metar->getAltim_in_hg ());
+    if (!xmlparser->metar->getAltim_in_hg_hPa ().isEmpty ()) {
+        text_metar.append ("\nQNH: " + xmlparser->metar->getAltim_in_hg_hPa ());
+        text_metar.append (" (" + xmlparser->metar->getAltim_in_hg_mmHg () + " мм.рт.ст.)");
     };
 
     if (!xmlparser->metar->getSnow_in ().isEmpty ()) {
@@ -174,55 +175,43 @@ QString Widget::forming_text_forecast ()
         if (forecast->wind_shear_speed_kt () != "") {
             text_taf.append (forecast->wind_shear_speed_kt () + " м/с ");
         };
-    }
-    /*
-
-        for (auto forecast : taf->v_forecasttaf.at (0)->v_forecasts) {
-
-
-        // видимость
         if (forecast->visibility_statute_mi () != "") {
-        _text_forecasts.append ("\n    Видимость: " + forecast->visibility_statute_mi () + " м. ");
+            text_taf.append ("\n    Видимость: " + forecast->visibility_statute_mi () + " м. ");
         };
-
         if (!forecast->tuple_list_sky_condition ().empty ()) {
-
-        for (auto elem : forecast->tuple_list_sky_condition ()) {
-        _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append ("\t");
-        _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-        _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-        }
+            for (auto elem : forecast->tuple_list_sky_condition ()) {
+                text_taf.append ("\n    ").append (QString (std::get<0> (elem))).append ("\t");
+                text_taf.append (QString (std::get<1> (elem))).append (" ");
+                text_taf.append (QString (std::get<2> (elem))).append (" ");
+            }
         };
 
         if (forecast->altim_in_hg () != "") {
-        _text_forecasts.append ("\n    Нижняя граница облачности:" + forecast->altim_in_hg () + " м. ");
+            text_taf.append ("\n    Нижняя граница облачности:" + forecast->altim_in_hg () + " м. ");
         };
         if (forecast->vert_vis_ft () != "") {
-        _text_forecasts.append ("\n    Вертикальная видимость:" + forecast->vert_vis_ft () + " м. ");
+            text_taf.append ("\n    Вертикальная видимость:" + forecast->vert_vis_ft () + " м. ");
         };
         if (forecast->wx_string () != "") {
-        _text_forecasts.append ("\n    " + forecast->wx_string () + " ");
-        };
-        if (forecast->not_decoded () != "") {
-        // НЕ ВЫВОДИТЬ :_text_forecasts.append ("\n Данные не расшифрованы:" + forecast->not_decoded () + " ");
+            text_taf.append ("\n    " + forecast->wx_string () + " ");
         };
 
         if (!forecast->turbulence_list_condition ().empty ()) {
-        for (auto elem : forecast->turbulence_list_condition ()) {
-        _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
-        _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-        _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-        }
+            for (auto elem : forecast->turbulence_list_condition ()) {
+                text_taf.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+                text_taf.append (QString (std::get<1> (elem))).append (" ");
+                text_taf.append (QString (std::get<2> (elem))).append (" ");
+            }
         };
         if (!forecast->icing_list_condition ().empty ()) {
-        for (auto elem : forecast->icing_list_condition ()) {
-        _text_forecasts.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
-        _text_forecasts.append (QString (std::get<1> (elem))).append (" ");
-        _text_forecasts.append (QString (std::get<2> (elem))).append (" ");
-        }
+            for (auto elem : forecast->icing_list_condition ()) {
+                text_taf.append ("\n    ").append (QString (std::get<0> (elem))).append (" ");
+                text_taf.append (QString (std::get<1> (elem))).append (" ");
+                text_taf.append (QString (std::get<2> (elem))).append (" ");
+            }
         };
-        }
-        */
+    }
+
     return text_metar + "\n" + text_taf;
 }
 void Widget::Show_weather ()

@@ -156,6 +156,9 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF ()
                         metar->setVisibility_statute_mi (xmlReader.readElementText ());
                     };
                 }
+                else if (xml_name == "altim_in_hg") {
+                    metar->setAltim_in_hg (xmlReader.readElementText ());
+                }
 
                 else if (xml_name == "wx_string") {
                     if (sign_buff == "tafs") {

@@ -15,8 +15,9 @@ class METAR : private Function {
     const QString& getWind_dir_degrees () const;
     const QString& getWind_speed_kt () const;
     const QString& getWind_gust_kt () const;
+    const QString& getAltim_in_hg_mmHg () const;
+    const QString& getAltim_in_hg_hPa () const;
     const QString& getVisibility_statute_mi () const;
-    const QString& getAltim_in_hg () const;
     const QString& getWx_string () const;
     const QString& getMaxT_c () const;
     const QString& getMinT_c () const;
@@ -54,7 +55,8 @@ class METAR : private Function {
     QString wind_speed_kt{};    //
     QString wind_gust_kt{};
     QString visibility_statute_mi_{}; //
-    QString altim_in_hg_{};           //
+    QString altim_in_hg_hPa{};        //
+    QString altim_in_hg_mmHg{};       //
     //QString sea_level_pressure_mb_{};         //
     QString wx_string_{}; //
     //QString flight_category_{};               //

@@ -63,16 +63,29 @@ void Forecast::set_condition (const QString name_list_condion, std::tuple<QStrin
 {
     if (name_list_condion == "sky_condition") {
 
-        Function::replace_tuple_sky_condition (node);
-        this->_tuple_list_sky_condition.append (node);
+        this->_tuple_list_sky_condition.append (std::move (std::make_tuple (replace_sky_cover (std::get<0> (node)), //
+          convert_ft_to_m (std::get<1> (node)),                                                                     //
+          replace_cloud_type (std::get<2> (node))                                                                   //
+          )));
     }
     else if (name_list_condion == "turbulence_condition") {
-        Function::replace_turbulence_condition (node);
-        this->_turbulence_list_condition.append (node);
+        // turbulence_intensity [0-9]
+        // turbulence_min_alt_ft_agl
+        // turbulence_max_alt_ft_agl
+        this->_turbulence_list_condition.append (std::move (std::make_tuple (std::get<0> (node), //
+          convert_ft_to_m (std::get<1> (node)),                                                  //
+          convert_ft_to_m (std::get<2> (node))                                                   //
+          )));
     }
     else if (name_list_condion == "icing_condition") {
-        Function::replace_icing_condition (node);
-        this->_icing_list_condition.append (node);
+        // icing_intensity [0-9]
+        // icing_min_alt_ft_agl
+        // icing_max_alt_ft_agl
+
+        this->_icing_list_condition.append (std::move (std::make_tuple (std::get<0> (node), //
+          convert_ft_to_m (std::get<1> (node)),                                             //
+          convert_ft_to_m (std::get<2> (node))                                              //
+          )));
     }
     else {
         qDebug () << "Condition not known";
