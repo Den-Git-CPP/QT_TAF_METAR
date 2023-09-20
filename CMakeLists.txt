@@ -67,7 +67,7 @@ target_link_libraries(${PROJECT_NAME}
 #message( "Create Directory:" ${MY_RELEASE_DIR})
 #file(MAKE_DIRECTORY ${MY_RELEASE_DIR})
 #message("CopyFile "  ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe  " to "  ${MY_RELEASE_DIR} )
-
+#
 #add_custom_command(
 #    TARGET ${PROJECT_NAME} POST_BUILD
 #    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.exe ${MY_RELEASE_DIR}

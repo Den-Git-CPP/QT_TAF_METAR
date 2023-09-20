@@ -52,6 +52,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     connect (bt_UUEE, &QPushButton::clicked, weather, [=] () {
         weather->start_close_timer ();
     });
+
     // передача вектора с буфером в парсер
     connect (downloader, &Downloader::onReady, xmlparser, [=] () {
         xmlparser->set_vec_buf_xml (downloader->get_vec_buf_xml ());
@@ -73,7 +74,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     this->setLayout (vbox);
 
     timer_show_weather = new QTimer (this);
-    timer_show_weather->setInterval (600000); // интервал 10 мин
+    timer_show_weather->setInterval (60000); // интервал 10 мин Qtimer 1000 ->1сек
     connect (timer_show_weather, &QTimer::timeout, this, &Widget::Show_weather);
     timer_show_weather->start ();
 }
@@ -143,7 +144,7 @@ QString Widget::forming_text_forecast ()
     for (const auto& forecast : xmlparser->taf->v_forecasts) {
 
         if (forecast->fcst_time_from () != "") {
-            text_taf.append ("\n-В период с " + forecast->fcst_time_from () + " ");
+            text_taf.append ("\n\n-В период с " + forecast->fcst_time_from () + " ");
         }
         if (forecast->fcst_time_to () != "") {
             text_taf.append ("по " + forecast->fcst_time_to ());
@@ -216,6 +217,7 @@ QString Widget::forming_text_forecast ()
 }
 void Widget::Show_weather ()
 {
+    qDebug () << "Show weather" << QTime::currentTime ().toString ();
     switch (position_selection) {
         case 1:
             emit this->bt_UUWW->clicked ();
