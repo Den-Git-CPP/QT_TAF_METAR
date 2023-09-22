@@ -60,7 +60,7 @@ void Forecast::set_visibility_statute_mi (const QString& visibility_statute_mi)
 }
 void Forecast::set_altim_in_hg (const QString& altim_in_hg) { this->_altim_in_hg = altim_in_hg; }
 void Forecast::set_vert_vis_ft (const QString& vert_vis_ft) { this->_vert_vis_ft = Function::replace_val_from_to (From_To::ft_to_m, vert_vis_ft); }
-void Forecast::set_wx_string (const QString& wx_string) { this->_wx_string = Function::replace_wx_string (wx_string); }
+void Forecast::set_wx_string (const QString& wx_string) { this->_wx_string = Function::replace_text (wx_string); }
 void Forecast::set_not_decoded (const QString& not_decoded) { this->_not_decoded = not_decoded; }
 void Forecast::set_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node)
 {

@@ -1,7 +1,7 @@
 #include "./include/widget.h"
 
 Widget::Widget (QWidget* parent) : QWidget (parent)
-{
+{ //
     this->resize (180, 70);
     this->setWindowTitle ("Запрос погоды");
     this->setWindowFlags (Qt::Window | Qt::WindowCloseButtonHint);
@@ -87,7 +87,6 @@ QString Widget::forming_text_forecast ()
     if (!xmlparser->metar->getObservation_time ().isEmpty ()) {
         text_metar.append ("ФАКТИЧЕСКАЯ за " + xmlparser->metar->getObservation_time ());
     };
-
     if (!xmlparser->metar->getRaw_text ().isEmpty ()) {
         text_metar.append ("\n" + xmlparser->metar->getRaw_text ());
     };
@@ -97,14 +96,12 @@ QString Widget::forming_text_forecast ()
     if (!xmlparser->metar->getWind_speed_kt ().isEmpty ()) {
         text_metar.append (" " + xmlparser->metar->getWind_speed_kt () + "м/с");
     };
-
     if (!xmlparser->metar->getVisibility_statute_mi ().isEmpty ()) {
         text_metar.append ("\nВидимость: ").append (xmlparser->metar->getVisibility_statute_mi ()).append ("м");
     };
     if (!xmlparser->metar->getVert_vis_ft ().isEmpty ()) {
         text_metar.append ("\nВертикальная видимость:" + xmlparser->metar->getVert_vis_ft ());
     };
-
     if (!xmlparser->metar->getTuple_list_sky_condition ().isEmpty ()) {
         for (auto elem : xmlparser->metar->getTuple_list_sky_condition ()) {
             text_metar.append ("\n" + QString (std::get<0> (elem))).append (" ");
@@ -112,23 +109,19 @@ QString Widget::forming_text_forecast ()
             text_metar.append (QString (std::get<2> (elem))).append (" ");
         }
     };
-
     if (!xmlparser->metar->getTemp_c ().isEmpty ()) {
         text_metar.append ("\nТемпература: " + xmlparser->metar->getTemp_c () + "°C");
     };
     if (!xmlparser->metar->getDwepoint_c ().isEmpty ()) {
         text_metar.append ("\nТочка россы: " + xmlparser->metar->getDwepoint_c () + "°C");
     };
-
     if (!xmlparser->metar->getAltim_in_hg_hPa ().isEmpty ()) {
         text_metar.append ("\nQNH: " + xmlparser->metar->getAltim_in_hg_hPa ());
         text_metar.append (" (" + xmlparser->metar->getAltim_in_hg_mmHg () + " мм.рт.ст.)");
     };
-
     if (!xmlparser->metar->getSnow_in ().isEmpty ()) {
         text_metar.append ("\nГлубина снега на земле:" + xmlparser->metar->getSnow_in ());
     };
-
     // TAF
     QString text_taf{};
     if (xmlparser->taf->valid_time_from () != "") {
@@ -140,7 +133,6 @@ QString Widget::forming_text_forecast ()
     if (xmlparser->taf->raw_text () != "") {
         text_taf.append (xmlparser->taf->raw_text ());
     }
-
     for (const auto& forecast : xmlparser->taf->v_forecasts) {
 
         if (forecast->fcst_time_from () != "") {
@@ -212,7 +204,6 @@ QString Widget::forming_text_forecast ()
             }
         };
     }
-
     return text_metar + "\n" + text_taf;
 }
 void Widget::Show_weather ()

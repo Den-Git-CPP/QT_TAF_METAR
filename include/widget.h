@@ -13,7 +13,6 @@
 #include <QWidget>
 
 #include "./include/downloader.h"
-
 #include "./include/lb_weather.h"
 #include "./include/metar.h"
 #include "./include/taf.h"
