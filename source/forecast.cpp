@@ -29,7 +29,7 @@ void Forecast::set_fcst_time_from (const QString& fcst_time_from) { this->_fcst_
 void Forecast::set_fcst_time_to (const QString& fcst_time_to) { this->_fcst_time_to = Function::replace_time (fcst_time_to); }
 void Forecast::set_change_indicator (const QString& change_indicator)
 { //
-    this->_change_indicator = Function::replace_change_indicator (change_indicator);
+    this->_change_indicator = Function::replace_text (change_indicator);
 }
 void Forecast::set_time_becoming (const QString& time_becoming)
 { //
@@ -63,9 +63,9 @@ void Forecast::set_condition (const QString name_list_condion, std::tuple<QStrin
 {
     if (name_list_condion == "sky_condition") {
 
-        this->_tuple_list_sky_condition.append (std::move (std::make_tuple (replace_sky_cover (std::get<0> (node)), //
-          convert_ft_to_m (std::get<1> (node)),                                                                     //
-          replace_cloud_type (std::get<2> (node))                                                                   //
+        this->_tuple_list_sky_condition.append (std::move (std::make_tuple (replace_text (std::get<0> (node)), //
+          convert_ft_to_m (std::get<1> (node)),                                                                //
+          replace_text (std::get<2> (node))                                                                    //
           )));
     }
     else if (name_list_condion == "turbulence_condition") {

@@ -21,7 +21,7 @@ const QString& METAR::getVert_vis_ft () const { return vert_vis_ft_; }
 const QList<std::tuple<QString, QString, QString> >& METAR::getTuple_list_sky_condition () const { return tuple_list_sky_condition; }
 
 void METAR::setRaw_text (const QString& newRaw_text) { raw_text_ = Function::replace_raw_text (newRaw_text); }
-void METAR::setStation_id (const QString& newStation_id) { station_id_ = Function::replace_id_staion (newStation_id); }
+void METAR::setStation_id (const QString& newStation_id) { station_id_ = Function::replace_text (newStation_id); }
 void METAR::setObservation_time (const QString& newObservation_time) { observation_time_ = Function::replace_time (newObservation_time); }
 void METAR::setTemp_c (const QString& newTemp_c) { temp_c_ = newTemp_c; }
 void METAR::setDwepoint_c (const QString& newDwepoint_c) { dwepoint_c_ = newDwepoint_c; }
@@ -30,9 +30,9 @@ void METAR::setWind_speed_kt (const QString& newWind_speed_kt) { wind_speed_kt =
 void METAR::setWind_gust_kt (const QString& newWind_gust_kt) { wind_gust_kt = Function::convert_kt_to_ms (newWind_gust_kt); }
 void METAR::setSky_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node)
 {
-    tuple_list_sky_condition.append (std::move (std::make_tuple (Function::replace_sky_cover (std::get<0> (node)), //
-      Function::convert_ft_to_m (std::get<1> (node)),                                                              //
-      Function::replace_cloud_type (std::get<2> (node))                                                            //
+    tuple_list_sky_condition.append (std::move (std::make_tuple (Function::replace_text (std::get<0> (node)), //
+      Function::convert_ft_to_m (std::get<1> (node)),                                                         //
+      Function::replace_text (std::get<2> (node))                                                             //
       )));
 }
 void METAR::setVisibility_statute_mi (const QString& newVisibility_statute_mi)
