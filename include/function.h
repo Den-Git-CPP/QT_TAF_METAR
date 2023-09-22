@@ -4,6 +4,7 @@
 #include <QMap>
 #include <QString>
 #include <QVector>
+static QMap<QString, QString> All_Dictionary;
 
 enum From_To {
     kt_to_ms,      // км в м/с
@@ -23,6 +24,6 @@ class Function {
     QString replace_val_from_to (const From_To& sign_val, const QString& _text);
     QString replace_raw_text (const QString& _raw_text);
     QString replace_time (const QString& _time);
-    QMap<QString, QString> All_Dictionary;
+
     void Load_AMOFSG_Dictionary ();
 };

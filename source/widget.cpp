@@ -74,7 +74,7 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     this->setLayout (vbox);
 
     timer_show_weather = new QTimer (this);
-    timer_show_weather->setInterval (60000); // интервал 10 мин Qtimer 1000 ->1сек
+    timer_show_weather->setInterval (600000); // интервал 10 мин Qtimer 1000 ->1сек
     connect (timer_show_weather, &QTimer::timeout, this, &Widget::Show_weather);
     timer_show_weather->start ();
 }

@@ -1,6 +1,11 @@
 #include "./include/function.h"
 
-Function::Function () { Function::Load_AMOFSG_Dictionary (); }
+Function::Function ()
+{
+    if (All_Dictionary.isEmpty ()) {
+        Function::Load_AMOFSG_Dictionary ();
+    }
+}
 Function::~Function () {}
 QString Function::replace_val_from_to (const From_To& sign_val, const QString& _text)
 {

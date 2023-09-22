@@ -22,7 +22,9 @@ const QList<std::tuple<QString, QString, QString> >& METAR::getTuple_list_sky_co
 
 void METAR::setRaw_text (const QString& newRaw_text) { raw_text_ = std::move (Function::replace_raw_text (newRaw_text)); }
 void METAR::setStation_id (const QString& newStation_id)
-{    station_id_ = std::move (Function::replace_text (newStation_id));
+{
+    station_id_ = std::move (Function::replace_text (newStation_id));
+    // station_id_ = std::move (Function::replace_wx_string (newStation_id));
 }
 void METAR::setObservation_time (const QString& newObservation_time) { observation_time_ = std::move (Function::replace_time (newObservation_time)); }
 void METAR::setTemp_c (const QString& newTemp_c) { temp_c_ = newTemp_c; }
