@@ -1,7 +1,5 @@
 #include "./include/function.h"
 
-#include <QList>
-
 Function::Function ()
 {
     //
@@ -40,6 +38,31 @@ QString Function::replace_text (const QString& _text)
     text.replace ("CU", " (кучеводождевая)");
     return text;
 }
+
+QString Function::replace_val_from_to (const From_To& sign_val, const QString& _text)
+{
+    QString val{};
+
+    switch (sign_val) {
+        case From_To::kt_to_ms: // км в м/с
+            val = QString::number (static_cast<int> (round (0.5 * _text.toDouble ())));
+            break;
+        case From_To::ft_to_m: //
+            val = QString::number (static_cast<int> (0.3 * _text.toDouble ()));
+            break;
+        case From_To::mi_to_m: //
+            val = QString::number (static_cast<int> (1000 * round (1.609344 * _text.toDouble ())));
+            break;
+        case From_To::inchHg_to_hPa: //
+            val = QString::number (static_cast<int> (round (33.8638 * _text.toDouble ())));
+            break;
+        case From_To::inchHg_to_mmHg: //
+            val = QString::number (static_cast<int> (round (25.4 * _text.toDouble ())));
+            break;
+        default: val = "Not Converting";
+    }
+    return val;
+}
 /*
 QString Function::replace_id_staion (const QString& _id_str)
 {
@@ -73,6 +96,7 @@ QString Function::replace_time (const QString& _time)
      change_indicator.replace ("FM", "ИЗМЕНЕНИЯ: ");
      return change_indicator;
  }*/
+
 QString Function::replace_wx_string (const QString& _wx_string)
 {
     QString wx_string{};
@@ -92,30 +116,29 @@ QString Function::replace_wx_string (const QString& _wx_string)
     }
     return wx_string;
 }
-QString Function::convert_kt_to_ms (const QString& _kt_to_ms)
-{ //
-    return QString::number (static_cast<int> (round (0.5 * _kt_to_ms.toDouble ())));
-}
-QString Function::convert_ft_to_m (const QString& _ft_to_m)
-{ //
+/*
+ QString Function::convert_kt_to_ms (const QString& _kt_to_ms)
+ { //
+     return QString::number (static_cast<int> (round (0.5 * _kt_to_ms.toDouble ())));
+ }
+ QString Function::convert_ft_to_m (const QString& _ft_to_m)
+ { //
 
-    return QString::number (static_cast<int> (0.3 * _ft_to_m.toDouble ()));
-}
-QString Function::convert_mi_to_m (const QString& _mi_to_m)
-{ //
-    return QString::number (static_cast<int> (1000 * round (1.609344 * _mi_to_m.toDouble ())));
-}
-
-QString Function::convert_inchHg_to_hPa (const QString& inchHg)
-{ // Дюймы ртутного столба в Гектопаскаль
-    return QString::number (static_cast<int> (round (33.8638 * inchHg.toDouble ())));
-}
-
-QString Function::convert_inchHg_to_mmHg (const QString& inchHg)
-{ // Дюймы ртутного столба в Миллиметры ртутного столба
-    return QString::number (static_cast<int> (round (25.4 * inchHg.toDouble ())));
-}
-
+     return QString::number (static_cast<int> (0.3 * _ft_to_m.toDouble ()));
+ }
+ QString Function::convert_mi_to_m (const QString& _mi_to_m)
+ { //
+     return QString::number (static_cast<int> (1000 * round (1.609344 * _mi_to_m.toDouble ())));
+ }
+ QString Function::convert_inchHg_to_hPa (const QString& inchHg)
+ { // Дюймы ртутного столба в Гектопаскаль
+     return QString::number (static_cast<int> (round (33.8638 * inchHg.toDouble ())));
+ }
+ QString Function::convert_inchHg_to_mmHg (const QString& inchHg)
+ { // Дюймы ртутного столба в Миллиметры ртутного столба
+     return QString::number (static_cast<int> (round (25.4 * inchHg.toDouble ())));
+ }
+ */
 void Function::Load_AMOFSG_Dictionary ()
 {
     QFile file (":/resource/AMOFSG_Dictionary.txt");

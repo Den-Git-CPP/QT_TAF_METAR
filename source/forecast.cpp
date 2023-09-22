@@ -39,24 +39,27 @@ void Forecast::set_probability (const QString& probability) { this->_probability
 void Forecast::set_wind_dir_degrees (const QString& wind_dir_degrees) { this->_wind_dir_degrees = wind_dir_degrees; }
 void Forecast::set_wind_speed_kt (const QString& wind_speed_kt)
 { //
-    this->_wind_speed_kt = Function::convert_kt_to_ms (wind_speed_kt);
+    this->_wind_speed_kt = Function::replace_val_from_to (From_To::kt_to_ms, wind_speed_kt);
 }
-void Forecast::set_wind_gust_kt (const QString& wind_gust_kt) { this->_wind_gust_kt = Function::convert_kt_to_ms (wind_gust_kt); }
+void Forecast::set_wind_gust_kt (const QString& wind_gust_kt)
+{
+    this->_wind_gust_kt = Function::replace_val_from_to (From_To::kt_to_ms, wind_gust_kt);
+}
 void Forecast::set_wind_shear_hgt_ft_agl (const QString& wind_shear_hgt_ft_agl)
 { //
-    this->_wind_shear_hgt_ft_agl = Function::convert_ft_to_m (wind_shear_hgt_ft_agl);
+    this->_wind_shear_hgt_ft_agl = Function::replace_val_from_to (From_To::ft_to_m, wind_shear_hgt_ft_agl);
 }
 void Forecast::set_wind_shear_dir_degrees (const QString& wind_shear_dir_degrees) { this->_wind_shear_dir_degrees = wind_shear_dir_degrees; }
 void Forecast::set_wind_shear_speed_kt (const QString& wind_shear_speed_kt)
 { //
-    this->_wind_shear_speed_kt = Function::convert_kt_to_ms (wind_shear_speed_kt);
+    this->_wind_shear_speed_kt = Function::replace_val_from_to (From_To::kt_to_ms, wind_shear_speed_kt);
 }
 void Forecast::set_visibility_statute_mi (const QString& visibility_statute_mi)
 { //
-    this->_visibility_statute_mi = Function::convert_mi_to_m (visibility_statute_mi);
+    this->_visibility_statute_mi = Function::replace_val_from_to (From_To::mi_to_m, visibility_statute_mi);
 }
 void Forecast::set_altim_in_hg (const QString& altim_in_hg) { this->_altim_in_hg = altim_in_hg; }
-void Forecast::set_vert_vis_ft (const QString& vert_vis_ft) { this->_vert_vis_ft = Function::convert_ft_to_m (vert_vis_ft); }
+void Forecast::set_vert_vis_ft (const QString& vert_vis_ft) { this->_vert_vis_ft = Function::replace_val_from_to (From_To::ft_to_m, vert_vis_ft); }
 void Forecast::set_wx_string (const QString& wx_string) { this->_wx_string = Function::replace_wx_string (wx_string); }
 void Forecast::set_not_decoded (const QString& not_decoded) { this->_not_decoded = not_decoded; }
 void Forecast::set_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node)
@@ -64,7 +67,7 @@ void Forecast::set_condition (const QString name_list_condion, std::tuple<QStrin
     if (name_list_condion == "sky_condition") {
 
         this->_tuple_list_sky_condition.append (std::move (std::make_tuple (replace_text (std::get<0> (node)), //
-          convert_ft_to_m (std::get<1> (node)),                                                                //
+          Function::replace_val_from_to (From_To::ft_to_m, std::get<1> (node)),                                //
           replace_text (std::get<2> (node))                                                                    //
           )));
     }
@@ -73,8 +76,8 @@ void Forecast::set_condition (const QString name_list_condion, std::tuple<QStrin
         // turbulence_min_alt_ft_agl
         // turbulence_max_alt_ft_agl
         this->_turbulence_list_condition.append (std::move (std::make_tuple (std::get<0> (node), //
-          convert_ft_to_m (std::get<1> (node)),                                                  //
-          convert_ft_to_m (std::get<2> (node))                                                   //
+          Function::replace_val_from_to (From_To::ft_to_m, std::get<1> (node)),                  //
+          Function::replace_val_from_to (From_To::ft_to_m, std::get<2> (node))                   //
           )));
     }
     else if (name_list_condion == "icing_condition") {
@@ -83,8 +86,8 @@ void Forecast::set_condition (const QString name_list_condion, std::tuple<QStrin
         // icing_max_alt_ft_agl
 
         this->_icing_list_condition.append (std::move (std::make_tuple (std::get<0> (node), //
-          convert_ft_to_m (std::get<1> (node)),                                             //
-          convert_ft_to_m (std::get<2> (node))                                              //
+          Function::replace_val_from_to (From_To::ft_to_m, std::get<1> (node)),             //
+          Function::replace_val_from_to (From_To::ft_to_m, std::get<2> (node))              //
           )));
     }
     else {

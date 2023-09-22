@@ -26,24 +26,27 @@ void METAR::setObservation_time (const QString& newObservation_time) { observati
 void METAR::setTemp_c (const QString& newTemp_c) { temp_c_ = newTemp_c; }
 void METAR::setDwepoint_c (const QString& newDwepoint_c) { dwepoint_c_ = newDwepoint_c; }
 void METAR::setWind_dir_degrees (const QString& newWind_dir_degrees) { wind_dir_degrees = newWind_dir_degrees; }
-void METAR::setWind_speed_kt (const QString& newWind_speed_kt) { wind_speed_kt = Function::convert_kt_to_ms (newWind_speed_kt); }
-void METAR::setWind_gust_kt (const QString& newWind_gust_kt) { wind_gust_kt = Function::convert_kt_to_ms (newWind_gust_kt); }
+void METAR::setWind_speed_kt (const QString& newWind_speed_kt)
+{
+    wind_speed_kt = Function::replace_val_from_to (From_To::kt_to_ms, newWind_speed_kt);
+}
+void METAR::setWind_gust_kt (const QString& newWind_gust_kt) { wind_gust_kt = Function::replace_val_from_to (From_To::kt_to_ms, newWind_gust_kt); }
 void METAR::setSky_condition (const QString name_list_condion, std::tuple<QString, QString, QString> node)
 {
     tuple_list_sky_condition.append (std::move (std::make_tuple (Function::replace_text (std::get<0> (node)), //
-      Function::convert_ft_to_m (std::get<1> (node)),                                                         //
+      Function::replace_val_from_to (From_To::ft_to_m, std::get<1> (node)),                                   //
       Function::replace_text (std::get<2> (node))                                                             //
       )));
 }
 void METAR::setVisibility_statute_mi (const QString& newVisibility_statute_mi)
 {
-    visibility_statute_mi_ = Function::convert_mi_to_m (newVisibility_statute_mi);
+    visibility_statute_mi_ = Function::replace_val_from_to (From_To::mi_to_m, newVisibility_statute_mi);
 }
 void METAR::setAltim_in_hg (const QString& newAltim_in_hg)
 {
-    altim_in_hg_hPa = Function::convert_inchHg_to_hPa (newAltim_in_hg); // Дюймы ртутного столба в Гектопаскаль
-    altim_in_hg_mmHg = Function::convert_inchHg_to_mmHg (newAltim_in_hg); // Дюймы ртутного столба в Миллиметры ртутного столба
+    altim_in_hg_hPa = Function::replace_val_from_to (From_To::inchHg_to_hPa, newAltim_in_hg); // Дюймы ртутного столба в Гектопаскаль
+    altim_in_hg_mmHg = Function::replace_val_from_to (From_To::inchHg_to_mmHg, newAltim_in_hg); // Дюймы ртутного столба в Миллиметры ртутного столба
 }
 void METAR::setWx_string (const QString& newWx_string) { wx_string_ = Function::replace_wx_string (newWx_string); }
 void METAR::setSnow_in (const QString& newSnow_in) { snow_in_ = newSnow_in; }
-void METAR::setVert_vis_ft (const QString& newVert_vis_ft) { vert_vis_ft_ = Function::convert_ft_to_m (newVert_vis_ft); }
+void METAR::setVert_vis_ft (const QString& newVert_vis_ft) { vert_vis_ft_ = Function::replace_val_from_to (From_To::ft_to_m, newVert_vis_ft); }

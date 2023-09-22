@@ -4,6 +4,15 @@
 #include <QMap>
 #include <QString>
 #include <QTextStream>
+#include <QList>
+enum From_To {
+    kt_to_ms,      // км в м/с
+    ft_to_m,       //
+    mi_to_m,       //
+    inchHg_to_hPa, //
+    inchHg_to_mmHg //
+};
+
 class Function {
   public:
     Function ();
@@ -12,16 +21,17 @@ class Function {
 
   protected:
     QString replace_text (const QString& _text);
+    QString replace_val_from_to (const From_To& sign_val, const QString& _text);
     // QString replace_id_staion (const QString& _raw_str);
     QString replace_raw_text (const QString& _raw_text);
     QString replace_time (const QString& _time);
     //    QString replace_text (const QString& _change_indicator);
     QString replace_wx_string (const QString& _wx_string);
-    QString convert_kt_to_ms (const QString& _kt_to_ms);
-    QString convert_ft_to_m (const QString& _ft_to_m);
-    QString convert_mi_to_m (const QString& mi_to_m);
-    QString convert_inchHg_to_hPa (const QString& inchHg);
-    QString convert_inchHg_to_mmHg (const QString& inchHg);
+    // QString convert_kt_to_ms (const QString& _kt_to_ms);
+    // QString convert_ft_to_m (const QString& _ft_to_m);
+    // QString convert_mi_to_m (const QString& mi_to_m);
+    // QString convert_inchHg_to_hPa (const QString& inchHg);
+    // QString convert_inchHg_to_mmHg (const QString& inchHg);
 
     // QString replace_sky_cover (QString& sky_cover_);
     // QString replace_text (QString& cloud_type_);
