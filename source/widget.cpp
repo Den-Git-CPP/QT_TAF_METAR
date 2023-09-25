@@ -7,13 +7,13 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     this->setWindowFlags (Qt::Window | Qt::WindowCloseButtonHint);
 
     icon1 = new QIcon ("./resource/meteo.ico");
-    this->setWindowIcon (*icon1); // Значок для окна
+    this->setWindowIcon (*icon1);                  // Значок для окна
 
     label = new QLabel (this);
     ft    = new QFont ("Arial", 12, QFont::Bold); // Устанавливаем размер шрифта
     pa    = new QPalette ();
     pa->setColor (QPalette::WindowText,
-      Qt::darkBlue); // Устанавливаем цвет шрифта
+      Qt::darkBlue);                              // Устанавливаем цвет шрифта
 
     label->setFont (*ft);
     label->setPalette (*pa);
@@ -62,7 +62,6 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
         weather->set_text_forecast (forming_text_forecast ());
         //  показываем Label
         weather->show ();
-        // qDebug () << "Show weather" << QTime::currentTime ().toString ();
     });
 
     vbox = new QVBoxLayout (this);
@@ -70,8 +69,10 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
     vbox->addWidget (bt_UUWW);
     vbox->addWidget (bt_UUDD);
     vbox->addWidget (bt_UUEE);
-
     this->setLayout (vbox);
+    // меню трея
+    this->setTrayIconActions ();
+    this->showTrayIcon ();
 
     timer_show_weather = new QTimer (this);
     timer_show_weather->setInterval (600000); // интервал 10 мин Qtimer 1000 ->1сек
@@ -80,6 +81,59 @@ Widget::Widget (QWidget* parent) : QWidget (parent)
 }
 
 Widget::~Widget () {}
+
+void Widget::changeEvent (QEvent* event)
+{
+    if (isMinimized ()) {
+        this->hide ();
+    }
+}
+
+void Widget::trayIconActivated (QSystemTrayIcon::ActivationReason reason)
+{
+
+    switch (reason) {
+        case QSystemTrayIcon::Trigger: //
+            setVisible (!isVisible ());
+        default:
+            break;
+    }
+}
+
+void Widget::setTrayIconActions ()
+{
+    // контекстное меню для нашего значка
+    minimizeAction = new QAction ("Свернуть", this);
+    restoreAction  = new QAction ("Восстановить", this);
+    quitAction     = new QAction ("Выход", this);
+
+    // Connecting actions to slots...
+    connect (minimizeAction, SIGNAL (triggered ()), this, SLOT (hide ()));
+    connect (restoreAction, SIGNAL (triggered ()), this, SLOT (showNormal ()));
+    connect (quitAction, SIGNAL (triggered ()), this, SLOT (close ()));
+
+    // Setting system tray's icon menu...
+    trayIconMenu = new QMenu (this);
+    trayIconMenu->addAction (minimizeAction);
+    trayIconMenu->addAction (restoreAction);
+    trayIconMenu->addAction (quitAction);
+}
+
+void Widget::showTrayIcon ()
+{
+    // Создаём экземпляр класса и задаём его свойства...
+    trayIcon = new QSystemTrayIcon (this);
+    QIcon trayImage (":/resource/meteo.ico");
+    trayIcon->setIcon (trayImage);
+    trayIcon->setContextMenu (trayIconMenu);
+
+    // Подключаем обработчик клика по иконке...
+    connect (trayIcon, SIGNAL (activated (QSystemTrayIcon::ActivationReason)), //
+      this, SLOT (trayIconActivated (QSystemTrayIcon::ActivationReason)));
+
+    // Выводим значок...
+    trayIcon->show ();
+}
 QString Widget::forming_text_forecast ()
 {
     QString text_metar{};

@@ -26,7 +26,8 @@ QString Function::replace_val_from_to (const From_To& sign_val, const QString& _
         case From_To::inchHg_to_mmHg: //
             val = QString::number (static_cast<int> (round (25.4 * _text.toDouble ())));
             break;
-        default: val = "Not Converting";
+        default:
+            val = "Not Converting";
     }
     return val;
 }
