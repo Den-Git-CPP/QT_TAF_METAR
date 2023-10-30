@@ -54,7 +54,7 @@ void lb_weather::set_text_forecast (QString text_forecast_)
 void lb_weather::start_close_timer ()
 {
     timer_close_weather = new QTimer (this);
-    timer_close_weather->setInterval (60000); // Qtimer 1000 ->1сек
+    timer_close_weather->setInterval (120000); // Qtimer 1000 ->1сек
     timer_close_weather->setSingleShot (true);
 
     connect (timer_close_weather, &QTimer::timeout, [=] {

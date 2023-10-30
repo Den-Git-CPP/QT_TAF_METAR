@@ -12,9 +12,9 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <QMenu>           
-#include <QMessageBox>     
-#include <QSystemTrayIcon> 
+#include <QMenu>           //2
+#include <QMessageBox>     //3
+#include <QSystemTrayIcon> //1
 
 #include "./include/downloader.h"
 #include "./include/lb_weather.h"

@@ -9,7 +9,6 @@ int main (int argc, char* argv [])
 
     Widget w;
     w.setWindowIcon (QIcon (":/resource/meteo.ico")); // Значок для окна
-
     w.show ();
     return a.exec ();
 }
