@@ -54,9 +54,16 @@ Widget::Widget(QWidget *parent) : QWidget(parent) { //
   connect(downloader, &Downloader::onReady, xmlparser, [=]() {
     xmlparser->set_vec_buf_xml(downloader->get_vec_buf_xml());
     xmlparser->fill_u_ptr_Forecast_METAR_TAF();
-    //  формируется строка прогноза
+    //  имя аэропорта
     weather->set_name_airport(xmlparser->taf->station_id());
-    weather->set_text_forecast(forming_text_forecast());
+    //  строка прогноза METAR
+    weather->set_text_raw_METAR("\n" + xmlparser->metar->getRaw_text());
+    weather->set_text_METAR(forming_text_metar());
+
+    //  строка прогноза TAF
+    weather->set_text_raw_TAF("\n" + xmlparser->taf->raw_text());
+    weather->set_text_TAF(forming_text_taf());
+
     //  показываем Label
     weather->show();
   });
@@ -126,15 +133,12 @@ void Widget::showTrayIcon() {
   // Выводим значок...
   trayIcon->show();
 }
-QString Widget::forming_text_forecast() {
-  QString text_metar{};
 
+QString Widget::forming_text_metar() {
+  QString text_metar{""};
   if (!xmlparser->metar->getObservation_time().isEmpty()) {
     text_metar.append("ФАКТИЧЕСКАЯ за " +
                       xmlparser->metar->getObservation_time());
-  };
-  if (!xmlparser->metar->getRaw_text().isEmpty()) {
-    text_metar.append("\n" + xmlparser->metar->getRaw_text());
   };
   if (!xmlparser->metar->getWind_dir_degrees().isEmpty()) {
     text_metar.append("\nВетер: " + xmlparser->metar->getWind_dir_degrees() +
@@ -175,22 +179,21 @@ QString Widget::forming_text_forecast() {
     text_metar.append("\nГлубина снега на земле:" +
                       xmlparser->metar->getSnow_in());
   };
-  // TAF
-  QString text_taf{};
+  return text_metar;
+}
+
+QString Widget::forming_text_taf() {
+  QString text_taf{""};
   if (xmlparser->taf->valid_time_from() != "") {
-    text_taf.append("\nПРОГНОЗ НА ПЕРИОД С " +
-                    xmlparser->taf->valid_time_from() + " ");
+    text_taf.append("ПРОГНОЗ НА ПЕРИОД С " + xmlparser->taf->valid_time_from() +
+                    " ");
   }
   if (xmlparser->taf->valid_time_to() != "") {
-    text_taf.append(" ПО " + xmlparser->taf->valid_time_to()).append(" \n");
-  }
-  if (xmlparser->taf->raw_text() != "") {
-    text_taf.append(xmlparser->taf->raw_text());
+    text_taf.append(" ПО " + xmlparser->taf->valid_time_to()).append("");
   }
   for (const auto &forecast : xmlparser->taf->v_forecasts) {
-
     if (forecast->fcst_time_from() != "") {
-      text_taf.append("\n\n-В период с " + forecast->fcst_time_from() + " ");
+      text_taf.append("\n-В период с " + forecast->fcst_time_from() + " ");
     }
     if (forecast->fcst_time_to() != "") {
       text_taf.append("по " + forecast->fcst_time_to());
@@ -268,8 +271,9 @@ QString Widget::forming_text_forecast() {
       }
     };
   }
-  return text_metar + "\n" + text_taf;
+  return text_taf;
 }
+
 void Widget::Show_weather() {
   qDebug() << "Show weather" << QTime::currentTime().toString();
   switch (position_selection) {

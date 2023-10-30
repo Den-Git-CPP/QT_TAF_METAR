@@ -219,5 +219,4 @@ void XMLParser::fill_u_ptr_Forecast_METAR_TAF() {
       return;
     }
   } // end for
-  qDebug() << "END";
 }
