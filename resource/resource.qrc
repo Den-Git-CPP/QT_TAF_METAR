@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>../resource/AirportName_Dictionary.txt</file>
+        <file>../resource/AMOFSG_Dictionary.txt</file>
+        <file>../resource/Dictionary.txt</file>
+    </qresource>
+</RCC>

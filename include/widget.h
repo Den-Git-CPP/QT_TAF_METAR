@@ -1,68 +1,46 @@
 #pragma once
 
-#include <QColor>
-#include <QDebug>
-#include <QIcon>
-#include <QLabel>
-#include <QPalette>
-#include <QPushButton>
-#include <QString>
-#include <QTime>
-#include <QTimer>
-#include <QVBoxLayout>
 #include <QWidget>
+#include <QIcon>
+#include "include/downloader.h"
+#include "include/storage_forecast.h"
+#include "include/widget_show_weather_2.h"
+
 #include <memory>
+#include <utility>
+#include <iostream>
+#include <QMessageBox>
+#include <QTimer>
 
-#include <QMenu>           //2
-#include <QMessageBox>     //3
-#include <QSystemTrayIcon> //1
-
-#include "./include/downloader.h"
-#include "./include/lb_weather.h"
-#include "./include/metar.h"
-#include "./include/taf.h"
-#include "./include/xmlparser.h"
+QT_BEGIN_NAMESPACE
+namespace Ui {
+    class Widget;
+}
+QT_END_NAMESPACE
 
 class Widget : public QWidget {
-  Q_OBJECT
+    Q_OBJECT
 
-public:
-  Widget(QWidget *parent = nullptr);
-  ~Widget();
-public slots:
-  void changeEvent(QEvent *event);
-  void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
-  void setTrayIconActions();
-  void showTrayIcon();
+  public:
+    explicit Widget (QWidget* parent = nullptr);
+    ~Widget ();
+  signals:
+    void onReadyShow ();
+  private slots:
+    void getBufferFromDowloanderToSForecast ();
+    void Show_weather ();
+    void Show_Error (const QString& ErrorMsg);
 
-private:
-  // окно запроса погоды
-  QLabel *label = nullptr;
-  QVBoxLayout *vbox = nullptr;
-  QFont *ft = nullptr;
-  QPalette *pa = nullptr;
-  QIcon *icon1 = nullptr;
-  QPushButton *bt_UUWW = nullptr;
-  QPushButton *bt_UUDD = nullptr;
-  QPushButton *bt_UUEE = nullptr;
+  private:
+    Ui::Widget* ui;
+    // Объявляем объект класса для скачивания данных по http
+    Downloader* downloader{ nullptr };
+    QTimer* timer_show_weather{ nullptr };
 
-  // меню к основному окну запроса погоды
-  QMenu *trayIconMenu;
-  QAction *minimizeAction;
-  QAction *restoreAction;
-  QAction *quitAction;
-  QSystemTrayIcon *trayIcon;
+    // Окно показа погоды
+    Widget_Show_Weather_2* wshow_weather2{ nullptr };
 
-  // окно погоды
-  lb_weather *weather = nullptr;
-  QTimer *timer_show_weather = nullptr;
-
-  Downloader *downloader = nullptr;
-  XMLParser *xmlparser = nullptr;
-
-  QString forming_text_metar();
-  QString forming_text_taf();
-
-  int position_selection{1};
-  void Show_weather();
+    int position_selection{ 1 };
+    // Объявляем объект класса для хранения прогноза погоды
+    std::unique_ptr<Storage_Forecast> storage_forecast{ nullptr };
 };

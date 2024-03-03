@@ -1,29 +1,36 @@
 #pragma once
-#include <QDateTime>
-#include <QFile>
-#include <QMap>
-#include <QString>
-#include <QVector>
-static QMap<QString, QString> All_Dictionary;
+// #include <QDebug>
+#include <fstream>
+#include <filesystem>
+#include <vector>
+#include <map>
+#include <string>
+#include <iostream>
+#include <cmath>
 
 enum From_To {
-    kt_to_ms,      // км в м/с
-    ft_to_m,       // футы в м
-    mi_to_m,       // мили в м
-    inchHg_to_hPa, // Дюймы ртутного столба в Гектопаскаль
-    inchHg_to_mmHg // Дюймы ртутного столба в Миллиметры ртутного столба
+    Time_Group,      // Время
+    Time_Date_Group, // Время действия прогноза
+    Wind_Group,      // Группа ветра
+    Var_Wind_Group,  // Группа ветра c изменением направления
+    Visib_Group,     // Группа видимость
+    Visib_Min_Group,
+    Visib_RNW_Group,
+    v_Cloud_Group,
+    Temperature_Group,
+    Pressure_Group,
+    Probably
 };
 
 class Function {
   public:
     Function ();
     ~Function ();
+    std::map<std::string, std::string> All_Dictionary;
 
   protected:
-    QString replace_text (const QString& _text);
-    QString replace_val_from_to (const From_To& sign_val, const QString& _text);
-    QString replace_raw_text (const QString& _raw_text);
-    QString replace_time (const QString& _time);
-
+    std::string replace_text (const std::string& _text);
+    std::string replace_temperature (const std::string& Temperature_Group_text);
+    std::string replace_val_from_to (const From_To& sign_val, const std::string& _text);
     void Load_AMOFSG_Dictionary ();
 };
